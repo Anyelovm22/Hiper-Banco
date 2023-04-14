@@ -21,7 +21,7 @@ public class Cliente {
         this.user = generarUsuario(nombre);
         this.status = status;
         this.clave = "";
-        this.tarjetaAcceso = tarjetaAcceso;
+        this.tarjetaAcceso = generarTarjetaAcceso();
         this.numerosCuenta = numerosCuenta;
     }
 
@@ -100,27 +100,27 @@ public class Cliente {
         this.numerosCuenta = numerosCuenta;
     }
 
-    public int[][] getTarjetaAcceso() {
-        return tarjetaAcceso;
-    }
+    //public int[][] getTarjetaAcceso() {
+    //    return tarjetaAcceso;
+   // }
 
-    public void setTarjetaAcceso(int[][] tarjetaAcceso) {
-        this.tarjetaAcceso = generarTarjetaAcceso();
-    }
+    //public void setTarjetaAcceso(int[][] tarjetaAcceso) {
+        //this.tarjetaAcceso = generarTarjetaAcceso();
+    //}
 
 
-//    public String getTarjetaAcceso() {  //CAMBIAR FORMATO Y 
-//        String acceso = "";
-//        acceso += "\n";
-//        for (int i = 0; i < 4; i++) {
-//            acceso += "[";
-//            for (int j = 0; j < 5; j++) {
-//                acceso += "[" + tarjetaAcceso[i][j] + "]";
-//            }
-//            acceso += "]\n";
-//        }
-//        return acceso;
-//    }
+   public String getTarjetaAcceso() {  //CAMBIAR FORMATO Y
+       String acceso = "";
+       acceso += "\n";
+        for (int i = 0; i < 4; i++) {
+            acceso += "[";
+            for (int j = 0; j < 5; j++) {
+                acceso += "[" + tarjetaAcceso[i][j] + "]";
+          }
+           acceso += "]\n";
+        }
+        return acceso;
+   }
 
 //    public void setTarjetaAcceso(int[][] tarjetaAcceso) {
 //        this.tarjetaAcceso = tarjetaAcceso;

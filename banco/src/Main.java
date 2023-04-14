@@ -180,6 +180,15 @@ public class Main {
     }
 
     public static void validateLogin(Cliente[] clienteArray, String username, Cliente cliente) {
+
+        boolean hayClientes = areThereClientes(clienteArray);
+        if (hayClientes) {
+            System.out.println("Redirigido a crear cliente");
+            agregarCliente(clienteArray, "");
+        }
+
+
+
         int count = 0;
         for (int i = 0; i < clienteArray.length; i++) {
             if (clienteArray[i] != null && !clienteArray[i].getID().equals("")) {
@@ -192,12 +201,12 @@ public class Main {
         }
         Cliente temporal = buscarClienteUsuario(clienteArray, username);
         if (temporal != null) {
-
+/*
             //String acceso = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
-            String accessCardInput = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
+            //String accessCardInput = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
 
 
-            //String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
+            String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
             String[] accessCardValues = accessCardInput.split("-");
             if (accessCardValues.length != 3) {
                 JOptionPane.showMessageDialog(null, "Tarjeta de acceso no válida.");
@@ -222,7 +231,7 @@ public class Main {
             if (!accessCardCorrect) {
                 JOptionPane.showMessageDialog(null, "Tarjeta de acceso incorrecta.");
             }
-
+*/
         } else {
             int opt = mostrarBotones(
                     "El cliente con el usuario: " + username + " no esta en el sistema",
@@ -290,7 +299,7 @@ public class Main {
         if (accessCardValues.length != 3) {
             JOptionPane.showMessageDialog(null, "Tarjeta de acceso no válida.");
         }
-// Compara los datos introducidos con el de la tarjeta de acceso
+// Compara los datos intro  ducidos con el de la tarjeta de acceso
         int[][] accessCard = cliente.getTarjetaAcceso();
         boolean accessCardCorrect = true;
         for (int i = 0; i < accessCardValues.length; i++) {
