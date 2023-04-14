@@ -9,8 +9,9 @@ public class Cliente {
     private String user;
     private String clave;
     private boolean status;
-    private int[][] tarjetaAcceso;//Anyelo
-    private int[] numerosCuenta; //Anyelo
+    private int[][] tarjetaAcceso;
+    private int[] numerosCuenta;
+
 
     public Cliente(String ID, String nombre, String phone, String email, String user, boolean status) {
         this.ID = ID;
@@ -19,9 +20,12 @@ public class Cliente {
         this.email = email;
         this.user = generarUsuario(nombre);
         this.status = status;
-        this.clave = ""; //Anyelo
-        this.tarjetaAcceso = generarTarjetaAcceso();//Anyelo
-        this.numerosCuenta = numerosCuenta;//Anyelo
+        this.clave = "";
+        this.tarjetaAcceso = tarjetaAcceso;
+        this.numerosCuenta = numerosCuenta;
+    }
+
+    public Cliente() {
     }
 
     public String getID() {
@@ -52,8 +56,9 @@ public class Cliente {
         return email;
     }
 
-    public void setEmail(String email) {
+    public String setEmail(String email) {
         this.email = email;
+        return email;
     }
 
     public String getUser() {
@@ -64,7 +69,7 @@ public class Cliente {
         this.user = user;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 
@@ -72,19 +77,14 @@ public class Cliente {
         this.status = status;
     }
 
-
-    //Anyelo
     public String getClave() {
         return clave;
     }
 
-    //Anyelo
     public void setClave(String clave) {
         this.clave = clave;
     }
 
-
-    //Anyelo
     public String getNumerosCuenta() {
         String cuenta = "";
         for (int i = 0; i < 5; i++) {
@@ -96,51 +96,59 @@ public class Cliente {
     }
 
 
-    //Anyelo
     public void setNumerosCuenta(int[] numerosCuenta) {
         this.numerosCuenta = numerosCuenta;
     }
 
+    public int[][] getTarjetaAcceso() {
+        return tarjetaAcceso;
+    }
 
-    //Anyelo
-    public String getTarjetaAcceso() {
-            String acceso = "";
-            acceso += "\n";
-            for (int i = 0; i < 4; i++) {
-                acceso += "[";
-                for (int j = 0; j < 5; j++) {
-                    acceso += "[" + tarjetaAcceso[i][j] + "]";
-                }
-                acceso += "]\n";
-
-            }
-
-            return acceso;
-        }
-
-    //Anyelo
     public void setTarjetaAcceso(int[][] tarjetaAcceso) {
-        this.tarjetaAcceso = tarjetaAcceso;
+        this.tarjetaAcceso = generarTarjetaAcceso();
     }
 
 
-    //Generamos la tarjeta de acceso aleatorio
-    //Anyelo
-        private int[][] generarTarjetaAcceso() {
-            int[][] tarjeta = new int[4][5];
-            Random random = new Random();
-            for (int i = 0; i < tarjeta.length; i++) {
-                for (int j = 0; j < tarjeta[i].length; j++) {
-                    tarjeta[i][j] = random.nextInt(90) + 10;
-                }
-            }
-            return tarjeta;
-        }
+//    public String getTarjetaAcceso() {  //CAMBIAR FORMATO Y 
+//        String acceso = "";
+//        acceso += "\n";
+//        for (int i = 0; i < 4; i++) {
+//            acceso += "[";
+//            for (int j = 0; j < 5; j++) {
+//                acceso += "[" + tarjetaAcceso[i][j] + "]";
+//            }
+//            acceso += "]\n";
+//        }
+//        return acceso;
+//    }
 
+//    public void setTarjetaAcceso(int[][] tarjetaAcceso) {
+//        this.tarjetaAcceso = tarjetaAcceso;
+//    }
+
+    //Generamos la tarjeta de acceso aleatorio
+
+    private int[][] generarTarjetaAcceso() {
+        int[][] tarjeta = new int[4][5];
+        Random random = new Random();
+        for (int i = 0; i < tarjeta.length; i++) {
+            for (int j = 0; j < tarjeta[i].length; j++) {
+                tarjeta[i][j] = random.nextInt(90) + 10;
+            }
+        }
+        return tarjeta;
+    }
     private String generarUsuario(String nombre) {
-        String id = Integer.toString( 1);
         String[] user = nombre.split(" ");
-        String usuario = user[0] + (40+id);
+        String usuario = user[0] + (40);
         return usuario;
+    }
+
+    public String info (){
+        return   "-*-*-*-*-*-*-*-*-*-*-*\n"
+                + " El id del cliente es: " + getID() + "\n El nombre completo del cliente es: "
+                + getNombre() + "\n El telefono del cliente es: " + getPhone()
+                + "\n El correo del cliente es: " + getEmail() + "\n El usuario del cliente: "
+                + getUser() + "\n El estado del cliente es: "+ getStatus() +"\nTarjeta de acceso\n" + getTarjetaAcceso();
     }
 }

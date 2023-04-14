@@ -1,38 +1,39 @@
-import javax.swing.*;
-import java.util.Date;
 import java.util.Random;
+import javax.swing.JOptionPane;
+//:
 
+/**
+ *
+ * @author Jostin
+ */
 public class Main {
+
     public static void main(String[] args) {
-
-
         Cliente[] clienteArray = new Cliente[30];
-        Banco banco = new Banco();
+        Banco banco = new Banco();//Atributos
+        Cliente cliente = new Cliente();
 
-//Atributos
 //---------------------------------------------------------------------- NOHAY
 //Llamado de Funciones Principales
 //----------------------------------------------------------------------
-        mostrarMenuPrincipal(clienteArray, banco);
+        mostrarMenuPrincipal(clienteArray, banco, cliente);
     }
 
     //Funciones Generales
 //----------------------------------------------------------------------
     public static int menuGenerico(String mensaje, String titulo, int imagen, String opciones[]) {
         //Menu con botones
-
         return JOptionPane.showOptionDialog(null, mensaje, titulo, JOptionPane.DEFAULT_OPTION, imagen, null, opciones, opciones[0]);
     }
 
     public static Object listaMenuGenerico(String mensaje, String titulo, int imagen, String opciones[]) {
         //Menu en lista
-
         return JOptionPane.showInputDialog(null, mensaje, titulo, imagen, null, opciones, opciones[0]);
     }
 
     //Funciones Especificas
     //------------------------------------------------------------------------
-    public static void mostrarMenuPrincipal(Cliente[] clienteArray, Banco banco) {
+    public static void mostrarMenuPrincipal(Cliente[] clienteArray, Banco banco, Cliente cliente) {
         //MENU PRINCIPAL
         String[] MAIN_MENU_OPTIONS = {"BANCO", "CLIENTES", "SALIR"};
         int choice;
@@ -40,12 +41,14 @@ public class Main {
             String message = "Bienvenido a HiperBanco, tu socio bancario de confianza. ¡Gracias por elegirnos!";
             choice = menuGenerico(message, "Inicio del Sistema", JOptionPane.DEFAULT_OPTION, MAIN_MENU_OPTIONS);//JOptionPane.showOptionDialog(null, message, "Inicio del Sistema", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, MAIN_MENU_OPTIONS, MAIN_MENU_OPTIONS[0]);
             switch (choice) {
-                case 0 -> mostrarMenuBanco(clienteArray);
-                case 1 -> validateLogin(clienteArray, banco);
-                case 2 -> JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
+                case 0 ->
+                        mostrarMenuBanco(clienteArray);
+                case 1 ->
+                        validateLogin(clienteArray, "", cliente);
+                case 2 ->
+                        JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
             }
         } while (choice != 2);
-
     }
 
     public static void mostrarMenuBanco(Cliente[] clienteArray) {
@@ -56,39 +59,36 @@ public class Main {
         do {
             choice = (String) listaMenuGenerico("Seleccione una opción:", "Menú Bancario", JOptionPane.PLAIN_MESSAGE, BANCO_MENU_OPTIONS);
             //(String) JOptionPane.showInputDialog(null, "Seleccione una opción:", "Menú Bancario", JOptionPane.PLAIN_MESSAGE, null, BANCO_MENU_OPTIONS, BANCO_MENU_OPTIONS[0]);
-
             if (choice == null) {
                 choice = BANCO_MENU_OPTIONS[BANCO_MENU_OPTIONS.length - 1];
             }
             switch (choice) {
                 case "Generar datos" -> {
                     JOptionPane.showMessageDialog(null, "Generar datos");
-                    int n = Integer.parseInt(JOptionPane.showInputDialog("Cuantos Clientes desea crear?: "));
-                    createRandomClientes(n, clienteArray);
+                    createRandomClientes(clienteArray);
                 }
                 case "Mostrar clientes" -> {
                     JOptionPane.showMessageDialog(null, "Mostrar clientes");
                     mostrarClientes(clienteArray);
                 }
-                case "Mostrar cuentas y movimientos" -> {
+                case "Mostrar cuentas y movimientos" -> {               //NO MUESTRA AUN
                     JOptionPane.showMessageDialog(null, "Mostrar cuentas y movimientos");
                 }
                 case "Agregar nuevo cliente" -> {
                     JOptionPane.showMessageDialog(null, "Agregar nuevo cliente");
-                    llenar(clienteArray, "");
-                    mostrarInfo(clienteArray);
+                    agregarCliente(clienteArray, "");
                 }
-                case "Agregar nueva cuenta" -> {
+                case "Agregar nueva cuenta" -> {                        //NO MUESTRA
                     JOptionPane.showMessageDialog(null, "Agregar nueva cuenta");
                 }
                 case "Buscar cliente" -> {
                     JOptionPane.showMessageDialog(null, "Buscar cliente");
-                    buscarCliente(clienteArray);
+                    buscarCliente(clienteArray, "", "", "");
                 }
-                case "Buscar cuenta" -> {
+                case "Buscar cuenta" -> {                               //NO MUESTRA
                     JOptionPane.showMessageDialog(null, "Buscar cuenta");
                 }
-                case "Generar reportes" -> {
+                case "Generar reportes" -> {                            //NO MUESTRA
                     JOptionPane.showMessageDialog(null, "Generar reportes");
                 }
                 case "Salir del menú bancario" -> {
@@ -105,16 +105,18 @@ public class Main {
         String choice;
         do {
             choice = (String) listaMenuGenerico("Seleccione una opción:", "Menú Clientes", JOptionPane.PLAIN_MESSAGE, CLIENTES_MENU_OPTIONS); //(String) JOptionPane.showInputDialog(null, "Seleccione una opción:", "Menú Bancario", JOptionPane.PLAIN_MESSAGE, null, BANCO_MENU_OPTIONS, BANCO_MENU_OPTIONS[0]);
-
             if (choice == null) {
                 choice = CLIENTES_MENU_OPTIONS[CLIENTES_MENU_OPTIONS.length - 1];
             }
             switch (choice) {
-                case "Mostrar datos personales" -> JOptionPane.showMessageDialog(null, "Mostrar datos personales");
-                case "Modificar datos personales" -> JOptionPane.showMessageDialog(null, "Modificar datos personales");
+                case "Mostrar datos personales" ->
+                        JOptionPane.showMessageDialog(null, "Mostrar datos personales");
+                case "Modificar datos personales" ->
+                        JOptionPane.showMessageDialog(null, "Modificar datos personales");
                 case "Mostrar cuentas y movimientos" ->
                         JOptionPane.showMessageDialog(null, "Mostrar cuentas y movimientos");
-                case "Salir del menu clientes" -> JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
+                case "Salir del menu clientes" ->
+                        JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
             }
         } while (!choice.equals(CLIENTES_MENU_OPTIONS[CLIENTES_MENU_OPTIONS.length - 1]));//Compara si el usuario ha elegido o no la opcion "Salir", si no la ha elegido el loop seguira.
     }
@@ -126,7 +128,6 @@ public class Main {
             JOptionPane.showMessageDialog(null, "El array de clientes es nulo");
             return false;
         }
-
         int count = 0;
         for (int i = 0; i < clienteArray.length; i++) {
             if (clienteArray[i] != null && !clienteArray[i].getID().equals("")) {
@@ -141,86 +142,186 @@ public class Main {
         }
     }
 
-    public static void createRandomClientes(int numClientes, Cliente[] clienteArray) {
+    public static void createRandomClientes(Cliente[] clienteArray) {
+        int numClientes = 0;
         //Generar Clientes Aleatorios Sin Input
+        if (indexDatos(clienteArray) == -1) {
+            JOptionPane.showMessageDialog(null,
+                    "Limite de clientes alcansado");
+            return;
+        }
+        numClientes = Integer.parseInt(JOptionPane.showInputDialog("Cuantos Clientes desea crear?: "));
         Random random = new Random();
-        String[] nombres = {"Juan", "Maria", "Luis", "Ana", "Pablo", "Carla", "Sofia", "Pedro", "Marta", "Diego", "Lucia", "Felipe", "Laura", "Carlos", "Camila", "Jorge", "Isabela", "Gustavo", "Valentina", "Lina", "Andres", "Mariana", "Fabio", "Paola", "Ricardo", "Tatiana", "Gabriel", "Juliana", "Alejandro", "Natalia", "Simon", "Victoria", "Lorenzo", "Jimena", "Emilio", "Daniela", "Roberto", "Olivia", "Mateo", "Agustina", "Ignacio"};
-        String[] apellidos = {"Gonzalez", "Rodriguez", "Gomez", "Fernandez", "Perez", "Martinez", "Lopez", "Sanchez", "Romero", "Sosa", "Alvarez", "Diaz", "Torres", "Ruiz", "Hernandez", "Flores", "Acosta", "Silva", "Ramirez", "Molina", "Ortega", "Nunez", "Cabrera", "Garcia", "Castillo", "Vega", "Benitez", "Vargas", "Miranda", "Castro", "Morales", "Vazquez", "Gutierrez", "Aguilar", "Rojas", "Soto", "Alonso", "Valdez", "Luna", "Gimenez", "Ferrari", "Leiva", "Maldonado"};
+        String[] nombres = {"Esteban", "Fatima", "Anthonny", "Anyelo", "Juan", "Maria", "Luis", "Ana", "Pablo", "Carla", "Sofia", "Pedro", "Marta", "Diego", "Lucia", "Felipe", "Laura", "Carlos", "Camila", "Jorge", "Isabela", "Gustavo", "Valentina", "Lina", "Andres", "Mariana", "Fabio", "Paola", "Ricardo", "Tatiana", "Gabriel", "Juliana", "Alejandro", "Natalia", "Simon", "Victoria", "Lorenzo", "Jimena", "Emilio", "Daniela", "Roberto", "Olivia", "Mateo", "Agustina", "Ignacio"};
+        String[] apellidos = {"Chinchilla", "Perez", "Merlo", "Vargas", "Gonzalez", "Rodriguez", "Gomez", "Fernandez", "Perez", "Martinez", "Lopez", "Sanchez", "Romero", "Sosa", "Alvarez", "Diaz", "Torres", "Ruiz", "Hernandez", "Flores", "Acosta", "Silva", "Ramirez", "Molina", "Ortega", "Nunez", "Cabrera", "Garcia", "Castillo", "Vega", "Benitez", "Vargas", "Miranda", "Castro", "Morales", "Vazquez", "Gutierrez", "Aguilar", "Rojas", "Soto", "Alonso", "Valdez", "Luna", "Gimenez", "Ferrari", "Leiva", "Maldonado"};
         String[] emails = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"};
-        String[] userNames = {"user1", "user2", "user3", "user4", "user5"};
-
         for (int i = 0; i < numClientes; i++) {
-            String id = Integer.toString(i + 1);
+            int id = random.nextInt(900000000) + 100000000;
+            String ID = String.valueOf(id);
             String nombre = nombres[random.nextInt(nombres.length)] + " " + apellidos[random.nextInt(apellidos.length)];
             String phone = "3" + String.format("%08d", random.nextInt(99999999));
             String email = nombre.split(" ")[0].toLowerCase() + "." + nombre.split(" ")[1].toLowerCase() + "@" + emails[random.nextInt(emails.length)];
-            String user = userNames[random.nextInt(userNames.length)] + Integer.toString(i + 1);
+            String user = nombre.split(" ")[0];
             boolean status = random.nextBoolean();
-            clienteArray[i] = new Cliente(id, nombre, phone, email, user, status);
+            int index = indexDatos(clienteArray);
+            clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status);
         }
         JOptionPane.showMessageDialog(null, "Clientes generados aleatoriamente");
-        JOptionPane.showMessageDialog(null, "Cliente Generado.");
     }
 
     //Mostrar informacion de todos los clientes agreagdos anteriormente es de la parte de mostrar clientes
     //Anyelo
     public static void mostrarClientes(Cliente[] clienteArray) {
-        for (int i = 0; i < indexDatos(clienteArray); i++)
-            JOptionPane.showMessageDialog(null, "-*-*-*-*-*-*-*-*-*-*-*\n"
-                    + " El correo del cliente es: " + clienteArray[i].getEmail() + "\n El nombre completo del cliente es: "
-                    + clienteArray[i].getNombre() + "\n El telefono del cliente es: " + clienteArray[i].getPhone()
-                    + "\nEl id del cliente es: " + clienteArray[i].getID() + "\n El usuario del cliente: "
-                    + clienteArray[i].getUser() + "\n El tarjeta de acceso: \n" + clienteArray[i].getTarjetaAcceso()
-                    + "\n El numero de cuentas: \n" + clienteArray[i].getNumerosCuenta());
+        int x = indexDatos(clienteArray) == -1
+                ? clienteArray.length : indexDatos(clienteArray);
+        for (int i = 0; i < x; i++) {
+            System.out.println(clienteArray[i].info());
+        }
     }
 
-    public static void mostrarInfo(Cliente[] clienteArray) {
-        for (int i = 0; i < indexDatos(clienteArray); i++)
-            System.out.println( "-*-*-*-*-*-*-*-*-*-*-*\n"
-                    + " El correo del cliente es: " + clienteArray[i].getEmail() + "\n El nombre completo del cliente es: "
-                    + clienteArray[i].getNombre() + "\n El telefono del cliente es: " + clienteArray[i].getPhone()
-                    + "\nEl id del cliente es: " + clienteArray[i].getID() + "\n El usuario del cliente: "
-                    + clienteArray[i].getUser() + "\n El tarjeta de acceso: \n" + clienteArray[i].getTarjetaAcceso()
-                    + "\n El numero de cuentas: \n" + clienteArray[i].getNumerosCuenta()
-                    + "Tarjeta de acceso\n" + clienteArray[i].getTarjetaAcceso() + "Tarjeta de numeros de cuenta " + clienteArray[i].getNumerosCuenta());
-    }
+    public static void validateLogin(Cliente[] clienteArray, String username, Cliente cliente) {
+        int count = 0;
+        for (int i = 0; i < clienteArray.length; i++) {
+            if (clienteArray[i] != null && !clienteArray[i].getID().equals("")) {
+                count++;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Hay " + count + " clientes en el sistema");
+        if (username.equals("")) {
+            username = JOptionPane.showInputDialog("Usuario del cliente: ");
+        }
+        Cliente temporal = buscarClienteUsuario(clienteArray, username);
+        if (temporal != null) {
 
-    public static boolean validateLogin(Cliente[] clienteArray, Banco banco) {
-        boolean hayClientes = areThereClientes(clienteArray); //Comprueba si hay clientes
-        //El login del menu de Clientes
-        if (hayClientes) {
-            while (true) {
+            //String acceso = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
+            String accessCardInput = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
 
-                // Input pidiendo el nombre de usuario
-                String username = JOptionPane.showInputDialog(null, "Ingrese su nombre de usuario:");
 
-                // Compara si existe el usuario en la lista de usuarios
-                boolean userExists = false;
-                Cliente currentCliente = null;
-                for (int i = 0; i < clienteArray.length; i++) {
-                    if (clienteArray[i].getUser().equals(username)) {
-                        userExists = true;
-                        currentCliente = clienteArray[i];
-                        JOptionPane.showMessageDialog(null, "Usuario encontrado.");
+            //String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
+            String[] accessCardValues = accessCardInput.split("-");
+            if (accessCardValues.length != 3) {
+                JOptionPane.showMessageDialog(null, "Tarjeta de acceso no válida.");
+            }
+// Compara los datos introducidos con el de la tarjeta de acceso
+            int[][] accessCard = cliente.getTarjetaAcceso();
+            boolean accessCardCorrect = true;
+            for (int i = 0; i < accessCardValues.length; i++) {
+                int value = Integer.parseInt(accessCardValues[i]);
+                boolean valueFound = false;
+                for (int j = 0; j < accessCard[i].length; j++) {
+                    if (accessCard[i][j] == value) {
+                        valueFound = true;
                         break;
                     }
                 }
-                // Si el usuario no existe
-                if (!userExists) {
-                    JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
-                    continue;// Usado en vez de break para no terminar el loop
+                if (!valueFound) {
+                    accessCardCorrect = false;
+                    break;
                 }
+            }
+            if (!accessCardCorrect) {
+                JOptionPane.showMessageDialog(null, "Tarjeta de acceso incorrecta.");
+            }
 
-                // Pide al usuario ingresar los valores de la tarjeta
-                String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
+        } else {
+            int opt = mostrarBotones(
+                    "El cliente con el usuario: " + username + " no esta en el sistema",
+                    "ID incorrecto",
+                    JOptionPane.WARNING_MESSAGE,
+                    new String[]{"Nuevo usuario", "Cancelar"});
+            if (opt == 0) {
+                validateLogin(clienteArray, "", cliente);
+
+            }
+        }
+    }
+
+    //Aqui  lo que se realiza es un ingreso de los datos de los clientes
+    //Anyelo
+    public static void agregarCliente(Cliente[] clienteArray, String email) {
+        //El if lo que realiza es un index del vector si el vector esta lleno nos indicara que el limite esta lleno
+        if (indexDatos(clienteArray) == -1) {
+            JOptionPane.showMessageDialog(null,
+                    "Limite de clientes alcansado");
+            return;
+        }
+        if (email.equals("")) {
+            email = JOptionPane.showInputDialog("Correo del cliente: ");
+        }
+        // Aqui se realiza la verificaion del ID si el ID esta repetido nos mandara a un else que es un boton
+        if (verificarCorreo(email)) { // TRUE or FALSE
+            String ID = JOptionPane.showInputDialog("Id del cliente: ");
+            if (buscarClienteId(clienteArray, ID) == null) {
+                String user = "";
+                String nombre = JOptionPane.showInputDialog("Nombre del cliente: ");
+                String phone = JOptionPane.showInputDialog("Telefono del cliente\n   Formato: 0000-0000 : ");
+                int index = indexDatos(clienteArray);
+                clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true);
+                JOptionPane.showMessageDialog(null,
+                        "-*-*Cliente agregado con exito-*-*");
+                System.out.println(clienteArray[index].info());
+            } else {
+                //boton el cual indica que el ID esta en el sistema, asi nos dara dos opciones
+                //agregar otro ID o cancelar el ingreso de la informacion
+                int opt = mostrarBotones(
+                        "El cliente con el id: " + ID + " ya esta en el sistema",
+                        "Codigo Repetido",
+                        JOptionPane.WARNING_MESSAGE,
+                        new String[]{"Nuevo codigo", "Cancelar"});
+                if (opt == 0) {
+                    agregarCliente(clienteArray, email);
+                }
+            }
+        } else {
+            int opt = mostrarBotones(
+                    "El cliente con el email: " + email + " es incorrecto",
+                    "Email invalido",
+                    JOptionPane.WARNING_MESSAGE,
+                    new String[]{"Nuevo email", "Cancelar"});
+            if (opt == 0) {
+                agregarCliente(clienteArray, "");
+            }
+        }
+    }
+
+    public static void validateAccesCard(Cliente cliente) {
+        String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
+        String[] accessCardValues = accessCardInput.split("-");
+        if (accessCardValues.length != 3) {
+            JOptionPane.showMessageDialog(null, "Tarjeta de acceso no válida.");
+        }
+// Compara los datos introducidos con el de la tarjeta de acceso
+        int[][] accessCard = cliente.getTarjetaAcceso();
+        boolean accessCardCorrect = true;
+        for (int i = 0; i < accessCardValues.length; i++) {
+            int value = Integer.parseInt(accessCardValues[i]);
+            boolean valueFound = false;
+            for (int j = 0; j < accessCard[i].length; j++) {
+                if (accessCard[i][j] == value) {
+                    valueFound = true;
+                    break;
+                }
+            }
+            if (!valueFound) {
+                accessCardCorrect = false;
+                break;
+            }
+        }
+        if (!accessCardCorrect) {
+            JOptionPane.showMessageDialog(null, "Tarjeta de acceso incorrecta.");
+        }
+    }
+
+    /*
+    
+    String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
                 String[] accessCardValues = accessCardInput.split("-");
                 if (accessCardValues.length != 3) {
                     JOptionPane.showMessageDialog(null, "Tarjeta de acceso no válida.");
                     continue;
                 }
-
-                // Compara los datos introducidos con el de la tarjeta de acceso
-                int[][] accessCard = banco.getAccessCard();
+// Compara los datos introducidos con el de la tarjeta de acceso
+                int[][] accessCard = cliente.getTarjetaAcceso();
                 boolean accessCardCorrect = true;
                 for (int i = 0; i < accessCardValues.length; i++) {
                     int value = Integer.parseInt(accessCardValues[i]);
@@ -236,90 +337,77 @@ public class Main {
                         break;
                     }
                 }
-
                 if (!accessCardCorrect) {
                     JOptionPane.showMessageDialog(null, "Tarjeta de acceso incorrecta.");
                     continue;
                 }
-
-                // Busca si el usuario esta activo
-                if (!currentCliente.isStatus()) {
-                    JOptionPane.showMessageDialog(null, "Usuario inactivo.");
-                    continue;
-                }
-
-                JOptionPane.showMessageDialog(null, "Acceso concedido.");
-                return true;
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No existen clientes");
-            return false;
-        }
-    }
-
-    //Aqui  lo que se realiza es un ingreso de los datos de los clientes
-    //Anyelo
-    public static void llenar(Cliente[] clienteArray, String email) {
-
-        //El if lo que realiza es un index del vector si el vector esta lleno nos indicara que el limite esta lleno
-        if (indexDatos(clienteArray) == -1) {
-            JOptionPane.showMessageDialog(null,
-                    "Limite de clientes alcansado");
-            return;
-        }
-
-        if (email.equals("")) {
-            email = JOptionPane.showInputDialog("Correo del cliente: ");
-        }
-        // Aqui se realiza la verificaion del ID si el ID esta repetido nos mandara a un else que es un boton
-
-        if (verificarCorreo(email)) { // TRUE or FALSE
-
-            String ID = JOptionPane.showInputDialog("Id del cliente: ");
-            if (buscarClienteId(clienteArray, ID) == null) {
-
-                String user = "";
-
-                String nombre = JOptionPane.showInputDialog("Nombre del cliente: ");
-
-                String phone = JOptionPane.showInputDialog("Telefono del cliente\n   Formato: 0000-0000 : ");
-
-                int index = indexDatos(clienteArray);
-
-                clienteArray[index] = new Cliente(
-                        ID, email, nombre, phone, user, true);
-
-                JOptionPane.showMessageDialog(null,
-                        "-*-*Cliente agregado con exito-*-*");
-
-            } else {
-
-                //boton el cual indica que el ID esta en el sistema, asi nos dara dos opciones
-                //agregar otro ID o cancelar el ingreso de la informacion
-                int opt = mostrarBotones(
-                        "El cliente con el id: " + ID + " ya esta en el sistema",
-                        "Codigo Repetido",
-                        JOptionPane.WARNING_MESSAGE,
-                        new String[]{"Nuevo codigo", "Cancelar"});
-
-                if (opt == 0) {
-                    llenar(clienteArray, email);
-                }
-            }
-        } else {
-            int opt = mostrarBotones(
-                    "El cliente con el email: " + email + " es incorrecto",
-                    "Email invalido",
-                    JOptionPane.WARNING_MESSAGE,
-                    new String[]{"Nuevo email", "Cancelar"});
-
-            if (opt == 0) {
-                llenar(clienteArray, "");
-            }
-
-        }
-    }
-
+    
+    
+     */
+//    public static boolean validateLoginViejo(Cliente[] clienteArray, Cliente cliente) {
+//        boolean hayClientes = areThereClientes(clienteArray); //Comprueba si hay clientes
+////El login del menu de Clientes
+//        if (hayClientes) {
+//            while (true) {
+//// Input pidiendo el nombre de usuario
+//                String username = JOptionPane.showInputDialog(null, "Ingrese su nombre de usuario:");
+//// Compara si existe el usuario en la lista de usuarios
+//                boolean userExists = false;
+//                Cliente currentCliente = null;
+//                for (int i = 0; i < clienteArray.length; i++) {
+//                    if (clienteArray[i].getUser().equals(username)) {
+//                        userExists = true;
+//                        currentCliente = clienteArray[i];
+//                        JOptionPane.showMessageDialog(null, "Usuario encontrado.");
+//                        break;
+//                    }
+//                }
+//// Si el usuario no existe
+//                if (!userExists) {
+//                    JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
+//                    continue;// Usado en vez de break para no terminar el loop
+//                }
+//// Pide al usuario ingresar los valores de la tarjeta
+//                String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
+//                String[] accessCardValues = accessCardInput.split("-");
+//                if (accessCardValues.length != 3) {
+//                    JOptionPane.showMessageDialog(null, "Tarjeta de acceso no válida.");
+//                    continue;
+//                }
+//// Compara los datos introducidos con el de la tarjeta de acceso
+//                int[][] accessCard = cliente.getTarjetaAcceso();
+//                boolean accessCardCorrect = true;
+//                for (int i = 0; i < accessCardValues.length; i++) {
+//                    int value = Integer.parseInt(accessCardValues[i]);
+//                    boolean valueFound = false;
+//                    for (int j = 0; j < accessCard[i].length; j++) {
+//                        if (accessCard[i][j] == value) {
+//                            valueFound = true;
+//                            break;
+//                        }
+//                    }
+//                    if (!valueFound) {
+//                        accessCardCorrect = false;
+//                        break;
+//                    }
+//                }
+//                if (!accessCardCorrect) {
+//                    JOptionPane.showMessageDialog(null, "Tarjeta de acceso incorrecta.");
+//                    continue;
+//                }
+//// Busca si el usuario esta activo
+//                if (!currentCliente.isStatus()) {
+//                    JOptionPane.showMessageDialog(null, "Usuario inactivo.");
+//                    continue;
+//                }
+//                JOptionPane.showMessageDialog(null, "Acceso concedido.");
+//                return true;
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(null, "No existen clientes");
+//            return false;
+//        }
+//    }
     //Anyelo
     public static int indexDatos(Cliente[] clienteArray) {
         for (int i = 0; i < clienteArray.length; i++) {
@@ -336,7 +424,6 @@ public class Main {
             String titulo,
             int imagen,
             String botones[]) {
-
         return JOptionPane.showOptionDialog(
                 null,
                 mensaje,
@@ -346,12 +433,10 @@ public class Main {
                 null,
                 botones,
                 botones[0]); // 0-1-2-3...
-
     }
 
     // el buscar cliente id lo utilizaremos para los botones en la parte de llenar informacion
     //Anyelo
-
     public static Cliente buscarClienteId(Cliente[] clienteArray, String id) {
         for (int i = 0; i < clienteArray.length; i++) {
             if (clienteArray != null) {
@@ -366,45 +451,111 @@ public class Main {
         return null;
     }
 
+    public static Cliente buscarClienteUsuario(Cliente[] clienteArray, String username) {
+        for (int i = 0; i < clienteArray.length; i++) {
+            if (clienteArray != null) {
+                if (clienteArray[i] == null) {
+                    return null;
+                }
+                if (clienteArray[i].getUser().equals(username)) {
+                    return clienteArray[i];
+                }
+            }
+        }
+        return null;
+    }
+
     //buscamos en la matriz de clientes para mostrar la informacion del cliente buscado esto es de la parte de buscar cliente
-    //Anyelo
-    public static void buscarCliente(Cliente[] clienteArray) {
+    public static void buscarCliente(Cliente[] clienteArray, String ID, String email, String remplazo) {
         // Buscamos
-        String id = JOptionPane.showInputDialog("Ingrese su Id: ");
+        if (ID.equals("")) {
+            ID = JOptionPane.showInputDialog("Id del cliente: ");
+        }
+        Cliente temporal = buscarClienteId(clienteArray, ID);
+        if (temporal != null) {
+            int opt = mostrarBotones(
+                    "Elija la opcion que deseas realizar",
+                    "Bienvenid@ " + temporal.getNombre(),
+                    JOptionPane.WARNING_MESSAGE,
+                    new String[]{"[Actualizar Informacion]", "[Activar-Desactivar]", "[Botones de Cuentas]", "[Cancelar]"});
+            if (opt == 0) {
+                int opt1 = mostrarBotones(
+                        "Elija la opcion que deseas realizar",
+                        "",
+                        JOptionPane.WARNING_MESSAGE,
+                        new String[]{"[Nombre completo]", "[Teléfono]", "[Correo]", "[Cancelar]"});
+                if (opt1 == 0) {
+                    temporal.setNombre(JOptionPane.showInputDialog(null, "Tu nombre actual es " + temporal.getNombre() + "\n Cual sera el nuevo nombre por el que lo deseas cambiar: "));
+                    buscarCliente(clienteArray, ID, email, remplazo);
+                }
+                if (opt1 == 1) {
+                    temporal.setPhone(JOptionPane.showInputDialog(null, "Tu telefono actual es " + temporal.getPhone() + "\n Cual sera el nuevo numero telefonico por el que lo deseas cambiar: "));
+                    buscarCliente(clienteArray, ID, email, remplazo);
+                }
+                if (opt1 == 2) {
+                    remplazo = temporal.setEmail(JOptionPane.showInputDialog(null, "Tu correo actual es " + temporal.getEmail() + "\n Cual sera el nuevo correo por el que lo deseas cambiar: "));
+                    if (verificarCorreo(remplazo) == true) {
+                        JOptionPane.showMessageDialog(null, "Correo modificado correctamente");
+                    } else {
+                        opt1 = mostrarBotones(
+                                "El cliente con el email: " + email + " es incorrecto",
+                                "Email invalido",
+                                JOptionPane.WARNING_MESSAGE,
+                                new String[]{"Nuevo email", "Cancelar"});
+                        if (opt1 == 0) {
+                            buscarCliente(clienteArray, ID, email, "");
+                        }
+                    }
+                }
+            }
+            if (opt == 1) {
+                if (temporal.getStatus() == true) {
+                    int opt2 = mostrarBotones(
+                            "El estado del cliente es: Activo",
+                            "Deseas poner en estado Inactivo",
+                            JOptionPane.WARNING_MESSAGE,
+                            new String[]{"Desactivar", "Cancelar"});
+                    if (opt2 == 0) {
+                        temporal.setStatus(false);
+                        buscarCliente(clienteArray, ID, email, remplazo);
+                    }
+                } else if (temporal.getStatus() == false) {
+                    int opt3 = mostrarBotones(
+                            "El estado del cliente es: Activo",
+                            "Deseas poner en estado Inactivo",
+                            JOptionPane.WARNING_MESSAGE,
+                            new String[]{"Desactivar", "Cancelar"});
+                    if (opt3 == 0) {
+                        temporal.setStatus(true);
+                        buscarCliente(clienteArray, ID, email, remplazo);
+                    }
+                }
 
-        Cliente cliente = buscarClienteId(clienteArray, id);
-
-        if (cliente == null) {
-
-            JOptionPane.showMessageDialog(null,
-                    "-*-*Cliente no exite-*-*");
-
+            }
+            if (opt == 2) {
+                System.out.println("Botones de Cuentas");
+            }
         } else {
-            System.out.println("-*-*-*-*-*-*-*-*-*-*-*\n"
-                    + " El correo del cliente es: " + cliente.getEmail() + "\n El nombre completo del cliente es: "
-                    + cliente.getNombre() + "\n El telefono del cliente es: " + cliente.getPhone()
-                    + "\nEl id del cliente es: " + cliente.getID() + "\n El usuario del cliente: "
-                    + cliente.getUser() + "\n El tarjeta de acceso: \n" + cliente.getTarjetaAcceso()
-                    + "\n El numero de cuentas: \n" + cliente.getNumerosCuenta()
-                    + "Tarjeta de acceso\n" + cliente.getTarjetaAcceso() + "Tarjeta de numeros de cuenta " + cliente.getNumerosCuenta());
-
+            int opt = mostrarBotones(
+                    "El cliente con el ID: " + ID + " no esta en el sistema",
+                    "ID incorrecto",
+                    JOptionPane.WARNING_MESSAGE,
+                    new String[]{"Nuevo ID", "Cancelar"});
+            if (opt == 0) {
+                buscarCliente(clienteArray, "", email, "");
+            }
         }
     }
 
     // aqui igual el verificado es para utilizarlo en la parte de llenar informacion
     //Anyelo
-    public static boolean verificarCorreo( String email) {
-
+    public static boolean verificarCorreo(String email) {
         // Expresión regular para validar el correo electrónico
         String pattern = "[^@]+@[^@]+\\.[^@]+";
-
         if (email.matches(pattern)) {
-            JOptionPane.showMessageDialog(null, "Correo electrónico agregado correctamente");
             return true;
-
-        }else {
+        } else {
             return false;
         }
-
     }
 }
