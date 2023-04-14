@@ -11,12 +11,11 @@ public class Main {
     public static void main(String[] args) {
         Cliente[] clienteArray = new Cliente[30];
         Banco banco = new Banco();//Atributos
-        Cliente cliente = new Cliente();
 
 //---------------------------------------------------------------------- NOHAY
 //Llamado de Funciones Principales
 //----------------------------------------------------------------------
-        mostrarMenuPrincipal(clienteArray, banco, cliente);
+        mostrarMenuPrincipal(clienteArray, banco);
     }
 
     //Funciones Generales
@@ -33,7 +32,7 @@ public class Main {
 
     //Funciones Especificas
     //------------------------------------------------------------------------
-    public static void mostrarMenuPrincipal(Cliente[] clienteArray, Banco banco, Cliente cliente) {
+    public static void mostrarMenuPrincipal(Cliente[] clienteArray, Banco banco) {
         //MENU PRINCIPAL
         String[] MAIN_MENU_OPTIONS = {"BANCO", "CLIENTES", "SALIR"};
         int choice;
@@ -44,7 +43,7 @@ public class Main {
                 case 0 ->
                         mostrarMenuBanco(clienteArray);
                 case 1 ->
-                        validateLogin(clienteArray, "", cliente);
+                        validateLogin(clienteArray, "");
                 case 2 ->
                         JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
             }
@@ -179,28 +178,27 @@ public class Main {
         }
     }
 
-    public static void validateLogin(Cliente[] clienteArray, String username, Cliente cliente) {
+    public static void validateLogin(Cliente[] clienteArray, String username) {
 
-        boolean hayClientes = areThereClientes(clienteArray);
-        if (hayClientes) {
+        areThereClientes(clienteArray);
+        boolean b = !areThereClientes(clienteArray);
+        if (b) {
             System.out.println("Redirigido a crear cliente");
             agregarCliente(clienteArray, "");
-        }
 
-
-
-        int count = 0;
-        for (int i = 0; i < clienteArray.length; i++) {
-            if (clienteArray[i] != null && !clienteArray[i].getID().equals("")) {
-                count++;
+        }if (!b){
+            int count = 0;
+            for (int i = 0; i < clienteArray.length; i++) {
+                if (clienteArray[i] != null && !clienteArray[i].getID().equals("")) {
+                    count++;
+                }
             }
-        }
-        JOptionPane.showMessageDialog(null, "Hay " + count + " clientes en el sistema");
-        if (username.equals("")) {
-            username = JOptionPane.showInputDialog("Usuario del cliente: ");
-        }
-        Cliente temporal = buscarClienteUsuario(clienteArray, username);
-        if (temporal != null) {
+            JOptionPane.showMessageDialog(null, "Hay " + count + " clientes en el sistema");
+            if (username.equals("")) {
+                username = JOptionPane.showInputDialog("Usuario del cliente: ");
+            }
+            Cliente temporal = buscarClienteUsuario(clienteArray, username);
+            if (temporal != null) {
 /*
             //String acceso = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
             //String accessCardInput = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
@@ -232,17 +230,23 @@ public class Main {
                 JOptionPane.showMessageDialog(null, "Tarjeta de acceso incorrecta.");
             }
 */
-        } else {
-            int opt = mostrarBotones(
-                    "El cliente con el usuario: " + username + " no esta en el sistema",
-                    "ID incorrecto",
-                    JOptionPane.WARNING_MESSAGE,
-                    new String[]{"Nuevo usuario", "Cancelar"});
-            if (opt == 0) {
-                validateLogin(clienteArray, "", cliente);
+            } else {
+                int opt = mostrarBotones(
+                        "El cliente con el usuario: " + username + " no esta en el sistema",
+                        "ID incorrecto",
+                        JOptionPane.WARNING_MESSAGE,
+                        new String[]{"Nuevo usuario", "Cancelar"});
+                if (opt == 0) {
+                    validateLogin(clienteArray, "");
 
+                }
             }
+
         }
+
+
+
+
     }
 
     //Aqui  lo que se realiza es un ingreso de los datos de los clientes
@@ -293,7 +297,7 @@ public class Main {
         }
     }
 
-    public static void validateAccesCard(Cliente cliente) {
+   /* public static void validateAccesCard(Cliente cliente) {
         String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
         String[] accessCardValues = accessCardInput.split("-");
         if (accessCardValues.length != 3) {
