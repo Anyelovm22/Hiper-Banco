@@ -180,22 +180,24 @@ public class Main {
     }
 
     public static void validateLogin(Cliente[] clienteArray, String username) {
-
-        areThereClientes(clienteArray);
-        boolean b = !areThereClientes(clienteArray);
-        if (b) {
-            System.out.println("Redirigido a crear cliente");
-
-            agregarCliente(clienteArray, "");
-
-        }if (!b){
+        boolean areClientes = areThereClientes(clienteArray);
+        if (!areClientes) {
+            int opt = mostrarBotones("Deseas ser redirigido a crear cliente",
+                    "Acceso no permitido",
+                    JOptionPane.WARNING_MESSAGE,
+                    new String[]{"Agregar un cliente", "Cancelar"});
+            if (opt == 0) {
+                agregarCliente(clienteArray, "");
+            }
+        }
+        if (areClientes) {
             int count = 0;
             for (int i = 0; i < clienteArray.length; i++) {
                 if (clienteArray[i] != null && !clienteArray[i].getID().equals("")) {
                     count++;
                 }
             }
-            JOptionPane.showMessageDialog(null, "Hay " + count + " clientes en el sistema");
+            //JOptionPane.showMessageDialog(null, "Hay " + count + " clientes en el sistema");
             if (username.equals("")) {
                 username = JOptionPane.showInputDialog("Usuario del cliente: ");
             }
@@ -237,7 +239,7 @@ public class Main {
                         "El cliente con el usuario: " + username + " no esta en el sistema",
                         "ID incorrecto",
                         JOptionPane.WARNING_MESSAGE,
-                        new String[]{"", "Cancelar"});
+                        new String[]{"Intentarlo de nuevo", "Cancelar"});
                 if (opt == 0) {
                     validateLogin(clienteArray, "");
 
