@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         Cliente[] clienteArray = new Cliente[30];
         Banco banco = new Banco();//Atributos
-
+//Atributos
 //---------------------------------------------------------------------- NOHAY
 //Llamado de Funciones Principales
 //----------------------------------------------------------------------
@@ -184,6 +184,7 @@ public class Main {
         boolean b = !areThereClientes(clienteArray);
         if (b) {
             System.out.println("Redirigido a crear cliente");
+
             agregarCliente(clienteArray, "");
 
         }if (!b){
@@ -235,7 +236,7 @@ public class Main {
                         "El cliente con el usuario: " + username + " no esta en el sistema",
                         "ID incorrecto",
                         JOptionPane.WARNING_MESSAGE,
-                        new String[]{"Nuevo usuario", "Cancelar"});
+                        new String[]{"", "Cancelar"});
                 if (opt == 0) {
                     validateLogin(clienteArray, "");
 
