@@ -124,7 +124,8 @@ public class Main {
     //clases y funciones para el menu de banco
     public static boolean areThereClientes(Cliente[] clienteArray) {
         if (clienteArray == null) {
-            JOptionPane.showMessageDialog(null, "El array de clientes es nulo");
+            System.out.println("El array de clientes es nulo, sera redirigido a registrarse");
+            JOptionPane.showMessageDialog(null, "El array de clientes es nulo, sera redirigido a registrarse");
             return false;
         }
         int count = 0;
