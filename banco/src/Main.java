@@ -11,8 +11,6 @@ public class Main {
     public static void main(String[] args) {
         Cliente[] clienteArray = new Cliente[30];
         Banco banco = new Banco();//Atributos
-//Atributos
-//---------------------------------------------------------------------- NOHAY
 //Llamado de Funciones Principales
 //----------------------------------------------------------------------
         mostrarMenuPrincipal(clienteArray, banco);
@@ -141,33 +139,71 @@ public class Main {
             return true;
         }
     }
+    // Declare userNumber as a class-level variable
+    private static int userNumber = 40;
 
+    //Generar Clientes Aleatorios Sin Input
     public static void createRandomClientes(Cliente[] clienteArray) {
         int numClientes = 0;
-        //Generar Clientes Aleatorios Sin Input
+        numClientes = Integer.parseInt(JOptionPane.showInputDialog("Cuantos Clientes desea crear?: "));
         if (indexDatos(clienteArray) == -1) {
-            JOptionPane.showMessageDialog(null,
-                    "Limite de clientes alcansado");
+            JOptionPane.showMessageDialog(null, "Limite de clientes alcanzado");
             return;
         }
-        numClientes = Integer.parseInt(JOptionPane.showInputDialog("Cuantos Clientes desea crear?: "));
+
+        if (numClientes > clienteArray.length - indexDatos(clienteArray)) {
+            int espaciosDisponibles = clienteArray.length - indexDatos(clienteArray);
+            JOptionPane.showMessageDialog(null, "La cantidad de clientes deseada excede el límite del array. Espacios disponibles: " + espaciosDisponibles);
+            return;
+        }
         Random random = new Random();
         String[] nombres = {"Esteban", "Fatima", "Anthonny", "Anyelo", "Juan", "Maria", "Luis", "Ana", "Pablo", "Carla", "Sofia", "Pedro", "Marta", "Diego", "Lucia", "Felipe", "Laura", "Carlos", "Camila", "Jorge", "Isabela", "Gustavo", "Valentina", "Lina", "Andres", "Mariana", "Fabio", "Paola", "Ricardo", "Tatiana", "Gabriel", "Juliana", "Alejandro", "Natalia", "Simon", "Victoria", "Lorenzo", "Jimena", "Emilio", "Daniela", "Roberto", "Olivia", "Mateo", "Agustina", "Ignacio"};
         String[] apellidos = {"Chinchilla", "Perez", "Merlo", "Vargas", "Gonzalez", "Rodriguez", "Gomez", "Fernandez", "Perez", "Martinez", "Lopez", "Sanchez", "Romero", "Sosa", "Alvarez", "Diaz", "Torres", "Ruiz", "Hernandez", "Flores", "Acosta", "Silva", "Ramirez", "Molina", "Ortega", "Nunez", "Cabrera", "Garcia", "Castillo", "Vega", "Benitez", "Vargas", "Miranda", "Castro", "Morales", "Vazquez", "Gutierrez", "Aguilar", "Rojas", "Soto", "Alonso", "Valdez", "Luna", "Gimenez", "Ferrari", "Leiva", "Maldonado"};
         String[] emails = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"};
+
         for (int i = 0; i < numClientes; i++) {
             int id = random.nextInt(900000000) + 100000000;
             String ID = String.valueOf(id);
             String nombre = nombres[random.nextInt(nombres.length)] + " " + apellidos[random.nextInt(apellidos.length)];
             String phone = "3" + String.format("%08d", random.nextInt(99999999));
             String email = nombre.split(" ")[0].toLowerCase() + "." + nombre.split(" ")[1].toLowerCase() + "@" + emails[random.nextInt(emails.length)];
-            String user = nombre.split(" ")[0];
+            String user = nombre.replaceAll("\\s+", "").toLowerCase() + userNumber; // Generar nombre de usuario basado en nombre y userNumber
             boolean status = random.nextBoolean();
             int index = indexDatos(clienteArray);
             clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status);
+            userNumber++; // Incrementa el número de usuarios para el siguiente usuario
         }
         JOptionPane.showMessageDialog(null, "Clientes generados aleatoriamente");
     }
+
+
+
+//    public static void createRandomClientes(Cliente[] clienteArray) {
+//        int numClientes = 0;
+//        //Generar Clientes Aleatorios Sin Input
+//        if (indexDatos(clienteArray) == -1) {
+//            JOptionPane.showMessageDialog(null,
+//                    "Limite de clientes alcansado");
+//            return;
+//        }
+//        numClientes = Integer.parseInt(JOptionPane.showInputDialog("Cuantos Clientes desea crear?: "));
+//        Random random = new Random();
+//        String[] nombres = {"Esteban", "Fatima", "Anthonny", "Anyelo", "Juan", "Maria", "Luis", "Ana", "Pablo", "Carla", "Sofia", "Pedro", "Marta", "Diego", "Lucia", "Felipe", "Laura", "Carlos", "Camila", "Jorge", "Isabela", "Gustavo", "Valentina", "Lina", "Andres", "Mariana", "Fabio", "Paola", "Ricardo", "Tatiana", "Gabriel", "Juliana", "Alejandro", "Natalia", "Simon", "Victoria", "Lorenzo", "Jimena", "Emilio", "Daniela", "Roberto", "Olivia", "Mateo", "Agustina", "Ignacio"};
+//        String[] apellidos = {"Chinchilla", "Perez", "Merlo", "Vargas", "Gonzalez", "Rodriguez", "Gomez", "Fernandez", "Perez", "Martinez", "Lopez", "Sanchez", "Romero", "Sosa", "Alvarez", "Diaz", "Torres", "Ruiz", "Hernandez", "Flores", "Acosta", "Silva", "Ramirez", "Molina", "Ortega", "Nunez", "Cabrera", "Garcia", "Castillo", "Vega", "Benitez", "Vargas", "Miranda", "Castro", "Morales", "Vazquez", "Gutierrez", "Aguilar", "Rojas", "Soto", "Alonso", "Valdez", "Luna", "Gimenez", "Ferrari", "Leiva", "Maldonado"};
+//        String[] emails = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"};
+//        for (int i = 0; i < numClientes; i++) {
+//            int id = random.nextInt(900000000) + 100000000;
+//            String ID = String.valueOf(id);
+//            String nombre = nombres[random.nextInt(nombres.length)] + " " + apellidos[random.nextInt(apellidos.length)];
+//            String phone = "3" + String.format("%08d", random.nextInt(99999999));
+//            String email = nombre.split(" ")[0].toLowerCase() + "." + nombre.split(" ")[1].toLowerCase() + "@" + emails[random.nextInt(emails.length)];
+//            String user = nombre.split(" ")[0];
+//            boolean status = random.nextBoolean();
+//            int index = indexDatos(clienteArray);
+//            clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status);
+//        }
+//        JOptionPane.showMessageDialog(null, "Clientes generados aleatoriamente");
+//    }
 
     //Mostrar informacion de todos los clientes agreagdos anteriormente es de la parte de mostrar clientes
     //Anyelo
@@ -259,7 +295,7 @@ public class Main {
         //El if lo que realiza es un index del vector si el vector esta lleno nos indicara que el limite esta lleno
         if (indexDatos(clienteArray) == -1) {
             JOptionPane.showMessageDialog(null,
-                    "Limite de clientes alcansado");
+                    "Limite de clientes alcanzado");
             return;
         }
         if (email.equals("")) {

@@ -18,7 +18,8 @@ public class Cliente {
         this.nombre = nombre;
         this.phone = phone;
         this.email = email;
-        this.user = generarUsuario(nombre);
+        this.user = user;
+//      this.user = generarUsuario(nombre);
         this.status = status;
         this.clave = "";
         this.tarjetaAcceso = generarTarjetaAcceso();
