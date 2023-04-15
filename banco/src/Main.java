@@ -150,7 +150,6 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Limite de clientes alcanzado");
             return;
         }
-
         if (numClientes > clienteArray.length - indexDatos(clienteArray)) {
             int espaciosDisponibles = clienteArray.length - indexDatos(clienteArray);
             JOptionPane.showMessageDialog(null, "La cantidad de clientes deseada excede el límite del array. Espacios disponibles: " + espaciosDisponibles);
