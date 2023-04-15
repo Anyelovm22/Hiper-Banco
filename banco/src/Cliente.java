@@ -67,7 +67,9 @@ public class Cliente {
     }
 
     public void setUser(String user) {
+
         this.user = user;
+
     }
 
     public boolean getStatus() {
@@ -138,11 +140,6 @@ public class Cliente {
             }
         }
         return tarjeta;
-    }
-    private String generarUsuario(String nombre) {
-        String[] user = nombre.split(" ");
-        String usuario = user[0] + (40);
-        return usuario;
     }
 
     public String info (){

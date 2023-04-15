@@ -288,13 +288,11 @@ public class Main {
 
     }
 
-    //Aqui  lo que se realiza es un ingreso de los datos de los clientes
-    //Anyelo
+    //Registro de Clientes Manualmente
     public static void agregarCliente(Cliente[] clienteArray, String email) {
         //El if lo que realiza es un index del vector si el vector esta lleno nos indicara que el limite esta lleno
         if (indexDatos(clienteArray) == -1) {
-            JOptionPane.showMessageDialog(null,
-                    "Limite de clientes alcanzado");
+            JOptionPane.showMessageDialog(null, "Limite de clientes alcanzado");
             return;
         }
         if (email.equals("")) {
@@ -304,38 +302,88 @@ public class Main {
         if (verificarCorreo(email)) { // TRUE or FALSE
             String ID = JOptionPane.showInputDialog("Id del cliente: ");
             if (buscarClienteId(clienteArray, ID) == null) {
-                String user = "";
                 String nombre = JOptionPane.showInputDialog("Nombre del cliente: ");
                 String phone = JOptionPane.showInputDialog("Telefono del cliente\n   Formato: 0000-0000 : ");
+
+                // Generate username based on the name of the client
+                String[] nombreSplit = nombre.split(" ");
+                String user = "";
+                for (String nombrePart : nombreSplit) {
+                    user += nombrePart.toLowerCase().replaceAll("\\s+", "");
+                }
+                user += userNumber; // Reads userNumber to count the number users
+
                 int index = indexDatos(clienteArray);
                 clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true);
-                JOptionPane.showMessageDialog(null,
-                        "-*-*Cliente agregado con exito-*-*");
+                JOptionPane.showMessageDialog(null, "-*-*Cliente agregado con exito-*-*");
                 System.out.println(clienteArray[index].info());
+                userNumber++; // Increment userNumber for the next user
             } else {
                 //boton el cual indica que el ID esta en el sistema, asi nos dara dos opciones
                 //agregar otro ID o cancelar el ingreso de la informacion
-                int opt = mostrarBotones(
-                        "El cliente con el id: " + ID + " ya esta en el sistema",
-                        "Codigo Repetido",
-                        JOptionPane.WARNING_MESSAGE,
-                        new String[]{"Nuevo codigo", "Cancelar"});
+                int opt = mostrarBotones("El cliente con el id: " + ID + " ya esta en el sistema", "Codigo Repetido",
+                        JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo codigo", "Cancelar" });
                 if (opt == 0) {
                     agregarCliente(clienteArray, email);
                 }
             }
         } else {
-            int opt = mostrarBotones(
-                    "El cliente con el email: " + email + " es incorrecto",
-                    "Email invalido",
-                    JOptionPane.WARNING_MESSAGE,
-                    new String[]{"Nuevo email", "Cancelar"});
+            int opt = mostrarBotones("El cliente con el email: " + email + " es incorrecto", "Email invalido",
+                    JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo email", "Cancelar" });
             if (opt == 0) {
                 agregarCliente(clienteArray, "");
             }
         }
     }
 
+
+    //Aqui  lo que se realiza es un ingreso de los datos de los clientes
+    //Anyelo
+//    public static void agregarCliente(Cliente[] clienteArray, String email) {
+//        //El if lo que realiza es un index del vector si el vector esta lleno nos indicara que el limite esta lleno
+//        if (indexDatos(clienteArray) == -1) {
+//            JOptionPane.showMessageDialog(null,
+//                    "Limite de clientes alcanzado");
+//            return;
+//        }
+//        if (email.equals("")) {
+//            String user = "";
+//            email = JOptionPane.showInputDialog("Correo del cliente: ");
+//        }
+//        // Aqui se realiza la verificaion del ID si el ID esta repetido nos mandara a un else que es un boton
+//        if (verificarCorreo(email)) { // TRUE or FALSE
+//            String ID = JOptionPane.showInputDialog("Id del cliente: ");
+//            if (buscarClienteId(clienteArray, ID) == null) {
+//                 String nombre = JOptionPane.showInputDialog("Nombre del cliente: ");
+//                String phone = JOptionPane.showInputDialog("Telefono del cliente\n   Formato: 0000-0000 : ");
+//                int index = indexDatos(clienteArray);
+//                clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true);
+//                JOptionPane.showMessageDialog(null,
+//                        "-*-*Cliente agregado con exito-*-*");
+//                System.out.println(clienteArray[index].info());
+//            } else {
+//                //boton el cual indica que el ID esta en el sistema, asi nos dara dos opciones
+//                //agregar otro ID o cancelar el ingreso de la informacion
+//                int opt = mostrarBotones(
+//                        "El cliente con el id: " + ID + " ya esta en el sistema",
+//                        "Codigo Repetido",
+//                        JOptionPane.WARNING_MESSAGE,
+//                        new String[]{"Nuevo codigo", "Cancelar"});
+//                if (opt == 0) {
+//                    agregarCliente(clienteArray, email);
+//                }
+//            }
+//        } else {
+//            int opt = mostrarBotones(
+//                    "El cliente con el email: " + email + " es incorrecto",
+//                    "Email invalido",
+//                    JOptionPane.WARNING_MESSAGE,
+//                    new String[]{"Nuevo email", "Cancelar"});
+//            if (opt == 0) {
+//                agregarCliente(clienteArray, "");
+//            }
+//        }
+//    }
    /* public static void validateAccesCard(Cliente cliente) {
         String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
         String[] accessCardValues = accessCardInput.split("-");
