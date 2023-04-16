@@ -1,17 +1,17 @@
 import java.util.Random;
 import javax.swing.JOptionPane;
-//:
 /**
  *
  * @author Jostin
  */
 public class Main {
     public static void main(String[] args) {
+//Listas
+//----------------------------------------------------------------------
         Cliente[] clienteArray = new Cliente[30];
-        Banco banco = new Banco();//Atributos
 //Llamado de Funciones Principales
 //----------------------------------------------------------------------
-        mostrarMenuPrincipal(clienteArray, banco);
+        mostrarMenuPrincipal(clienteArray);
     }
     //Funciones Generales
 //----------------------------------------------------------------------
@@ -25,7 +25,7 @@ public class Main {
     }
     //Funciones Especificas
     //------------------------------------------------------------------------
-    public static void mostrarMenuPrincipal(Cliente[] clienteArray, Banco banco) {
+    public static void mostrarMenuPrincipal(Cliente[] clienteArray) {
         //MENU PRINCIPAL
         String[] MAIN_MENU_OPTIONS = {"BANCO", "CLIENTES", "SALIR"};
         int choice;
