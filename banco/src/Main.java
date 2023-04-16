@@ -1,7 +1,7 @@
 import java.util.Random;
 import javax.swing.JOptionPane;
+
 /**
- *
  * @author Anyelo Y Jostin
  */
 public class Main {
@@ -14,16 +14,19 @@ public class Main {
         //----------------------------------------------------------------------
         mostrarMenuPrincipal(clienteArray);
     }
+
     //Funciones Generales
     //----------------------------------------------------------------------
     public static int menuGenerico(String mensaje, String titulo, int imagen, String[] opciones) {
         //Menu con botones
         return JOptionPane.showOptionDialog(null, mensaje, titulo, JOptionPane.DEFAULT_OPTION, imagen, null, opciones, opciones[0]);
     }
+
     public static Object listaMenuGenerico(String mensaje, String titulo, int imagen, String[] opciones) {
         //Menu en lista
         return JOptionPane.showInputDialog(null, mensaje, titulo, imagen, null, opciones, opciones[0]);
     }
+
     //Funciones Especificas
     //------------------------------------------------------------------------
     public static void mostrarMenuPrincipal(Cliente[] clienteArray) {
@@ -34,15 +37,13 @@ public class Main {
             String message = "Bienvenido a HiperBanco, tu socio bancario de confianza. ¡Gracias por elegirnos!";
             choice = menuGenerico(message, "Inicio del Sistema", JOptionPane.DEFAULT_OPTION, MAIN_MENU_OPTIONS);//JOptionPane.showOptionDialog(null, message, "Inicio del Sistema", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, MAIN_MENU_OPTIONS, MAIN_MENU_OPTIONS[0]);
             switch (choice) {
-                case 0 ->
-                        mostrarMenuBanco(clienteArray);
-                case 1 ->
-                        validateLogin(clienteArray, "" );
-                case 2 ->
-                        JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
+                case 0 -> mostrarMenuBanco(clienteArray);
+                case 1 -> validateLogin(clienteArray, "");
+                case 2 -> JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
             }
         } while (choice != 2);
     }
+
     public static void mostrarMenuBanco(Cliente[] clienteArray) {
         //MENU BANCO
         String[] BANCO_MENU_OPTIONS = {"Generar datos", "Mostrar clientes", "Mostrar cuentas y movimientos", "Agregar nuevo cliente",
@@ -71,7 +72,7 @@ public class Main {
                 }
                 case "Agregar nueva cuenta" -> {//NO MUESTRA
                     JOptionPane.showMessageDialog(null, "Agregar nueva cuenta");
-                    agregarCuenta(clienteArray,"");
+                    agregarCuenta(clienteArray, "");
                 }
                 case "Buscar cliente" -> {
                     JOptionPane.showMessageDialog(null, "Buscar cliente");
@@ -86,6 +87,7 @@ public class Main {
         } while (!choice.equals(BANCO_MENU_OPTIONS[BANCO_MENU_OPTIONS.length - 1]));//Compara si el usuario ha elegido o no la opcion "Salir", si no la ha elegido el loop seguira.
         //Solo funciona con Strings
     }
+
     public static void mostrarMenuClientes(Cliente[] clienteArray) {
         //MENU CLIENTES
         String[] CLIENTES_MENU_OPTIONS = {"Mostrar datos personales", "Modificar datos personales", "Mostrar cuentas y movimientos", "Salir del menu clientes"};
@@ -96,17 +98,15 @@ public class Main {
                 choice = CLIENTES_MENU_OPTIONS[CLIENTES_MENU_OPTIONS.length - 1];
             }
             switch (choice) {
-                case "Mostrar datos personales" ->
-                        JOptionPane.showMessageDialog(null, "Mostrar datos personales");
-                case "Modificar datos personales" ->
-                        JOptionPane.showMessageDialog(null, "Modificar datos personales");
+                case "Mostrar datos personales" -> JOptionPane.showMessageDialog(null, "Mostrar datos personales");
+                case "Modificar datos personales" -> JOptionPane.showMessageDialog(null, "Modificar datos personales");
                 case "Mostrar cuentas y movimientos" ->
                         JOptionPane.showMessageDialog(null, "Mostrar cuentas y movimientos");
-                case "Salir del menu clientes" ->
-                        JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
+                case "Salir del menu clientes" -> JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
             }
         } while (!choice.equals(CLIENTES_MENU_OPTIONS[CLIENTES_MENU_OPTIONS.length - 1]));//Compara si el usuario ha elegido o no la opcion "Salir", si no la ha elegido el loop seguira.
     }
+
     //--------------------------------------------------------------------------------------------
     //clases y funciones para el menu de banco
     public static boolean areThereClientes(Cliente[] clienteArray) {
@@ -128,8 +128,10 @@ public class Main {
             return true;
         }
     }
+
     // Declare userNumber as a class-level variable
     private static int userNumber = 40;
+
     //Generar Clientes Aleatorios Sin Input
     public static void createRandomClientes(Cliente[] clienteArray) {
         int numClientes;
@@ -181,7 +183,7 @@ public class Main {
                     email = emailName + "@" + emailDomain;
                 }
             } while (isEmailDuplicate);
-            String user = nombre.split(" ")[0].toLowerCase()+ userNumber; // Set username as just the first name without spaces
+            String user = nombre.split(" ")[0].toLowerCase() + userNumber; // Set username as just the first name without spaces
             boolean status = true;
             int index = indexDatos(clienteArray);
             clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status);
@@ -190,52 +192,53 @@ public class Main {
         JOptionPane.showMessageDialog(null, "Clientes generados aleatoriamente");
     }
 
-    private static int accountNumber = 4710;
+    private static int accountNumber = 4709;
 
 
     //Registro de Cuenta Manualmente
-    public static void agregarCuenta(Cliente[] clienteArray,String ID){
-        int[] cuentas = new int[5];
-
+    public static void agregarCuenta(Cliente[] clienteArray, String ID) {
+        int index = 0;
         if (ID.equals("")) {
             ID = JOptionPane.showInputDialog("Id del cliente: ");
         }
         Cliente temporal = buscarClienteId(clienteArray, ID);
         if (temporal != null) {
-            while (true){
-                int cantidad = Integer.parseInt(JOptionPane.showInputDialog(null,"¿Cuántas cuentas desea agregar? (Ingrese 0 para salir)"));
-                if (cantidad == 0) {
-                    break; // salir del bucle si el usuario ingresa 0
+            int[] cuentas = temporal.getNumerosCuenta();
+            int cantidad = Integer.parseInt(JOptionPane.showInputDialog(null, "Bienvenid@ "
+                    + temporal.getNombre() + "\n ¿Cuántas cuentas desea agregar? (Ingrese 0 para salir)"));
+            if (cantidad == 0) {
+            } else if (cuentas[4] != 0) {
+                JOptionPane.showMessageDialog(null, "El límite de cuentas ha sido alcanzado");
+                int opt = menuGenerico("El cliente ya tiene 5 cuentas registradas en el sistema",
+                        "Codigo Repetido",
+                        JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo usuario", "Cancelar"});
+                if (opt == 0) {
+                    agregarCuenta(clienteArray, "");
                 }
-                for (int i = 0; i < cantidad; i++) {
-                    if (accountNumber == 5) {
-                        System.out.println("El límite de cuentas ha sido alcanzado");
-                        break; // salir del bucle si se alcanza el límite de cuentas
-                    }
+            } else if (indexCuenta(cuentas) + 1 + cantidad > 6) {
+                JOptionPane.showMessageDialog(null, "Estas ingresando un numero mayor" +
+                        " a la cantidad de la cuenta");
+            } else {
+                index = indexCuenta(cuentas);
+                if (index != 0) {
+                    //index += 1;
                 }
-                cuentas[accountNumber] = accountNumber + 1; // agregar cuenta al arreglo
-                accountNumber++; // incrementar contador de cuentas agregadas
-                System.out.println("Cuenta " + (accountNumber) + " agregada");
+                for (int i = index; i < cantidad+index; i++) {
+                    cuentas[i] = accountNumber + 1; // agregar cuenta al arreglo
+                    accountNumber++; // incrementar contador de cuentas agregadas
+                }
+                JOptionPane.showMessageDialog(null, "Cuentas agregadas:");
+                for (int i = 0; i < cuentas.length; i++) {
+                    JOptionPane.showMessageDialog(null,"Las cuentas del cliente"+temporal.getNombre()+
+                            "["+ cuentas[i] +"]");
+                }
             }
-            System.out.println("Cuentas agregadas:");
-            for (int i = 0; i < accountNumber; i++) {
-                System.out.println(cuentas[i]);
-            }
-            int index = indexDatos(clienteArray);
-            JOptionPane.showMessageDialog(null, "-*-*Cliente agregado con exito-*-*");
-            clienteArray[index] = new Cliente(ID, temporal.getNombre(), temporal.getNombre(), temporal.getNombre(),
-                    temporal.getNumerosCuenta(), true);
-            System.out.println(clienteArray[index].info());
         } else {
-            //boton el cual indica que el ID esta en el sistema, asi nif (ID.equals("")) {
-        //            ID = JOptionPane.showInputDialog("Id del cliente: ");
-        //        }
-        //        Cliente temporal = buscarClienteId(clienteArray, ID);os dara dos opciones
-            //agregar otro ID o cancelar el ingreso de la informacion
-            int opt = menuGenerico("El cliente con el id: " + ID + " ya esta en el sistema", "Codigo Repetido",
-                    JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo codigo", "Cancelar" });
+            int opt = menuGenerico("El cliente con el id: " + ID + " no esta en el sistema",
+                    "Codigo Repetido",
+                    JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo codigo", "Cancelar"});
             if (opt == 0) {
-                agregarCuenta(clienteArray,"");
+                agregarCuenta(clienteArray, "");
             }
         }
     }
@@ -279,7 +282,7 @@ public class Main {
                 String nombre = JOptionPane.showInputDialog("Nombre del cliente: ");
                 String phone = JOptionPane.showInputDialog("Telefono del cliente\n   Formato: 0000-0000 : ");
                 // Generate username based on the name of the client
-                String user = nombre.split(" ")[0].toLowerCase()+ userNumber;
+                String user = nombre.split(" ")[0].toLowerCase() + userNumber;
                 int index = indexDatos(clienteArray);
                 clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true);
                 JOptionPane.showMessageDialog(null, "-*-*Cliente agregado con exito-*-*");
@@ -289,19 +292,20 @@ public class Main {
                 //boton el cual indica que el ID esta en el sistema, asi nos dara dos opciones
                 //agregar otro ID o cancelar el ingreso de la informacion
                 int opt = menuGenerico("El cliente con el id: " + ID + " ya esta en el sistema", "Codigo Repetido",
-                        JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo codigo", "Cancelar" });
+                        JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo codigo", "Cancelar"});
                 if (opt == 0) {
                     agregarCliente(clienteArray, email);
                 }
             }
         } else {
             int opt = menuGenerico("El cliente con el email: " + email + " es incorrecto", "Email invalido",
-                    JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo email", "Cancelar" });
+                    JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo email", "Cancelar"});
             if (opt == 0) {
                 agregarCliente(clienteArray, "");
             }
         }
     }
+
     //Mostrar informacion de todos los clientes agreagdos anteriormente es de la parte de mostrar clientes
     //Anyelo
     public static void mostrarClientes(Cliente[] clienteArray) {
@@ -413,6 +417,16 @@ public class Main {
         }
         return -1;
     }
+
+    public static int indexCuenta(int[] cuentas) {
+        for (int i = 0; i < cuentas.length; i++) {
+            if (cuentas[i] == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     // el buscar cliente id lo utilizaremos para los botones en la parte de llenar informacion
     //Anyelo
     public static Cliente buscarClienteId(Cliente[] clienteArray, String id) {
@@ -428,6 +442,7 @@ public class Main {
         }
         return null;
     }
+
     public static Cliente buscarClienteUsuario(Cliente[] clienteArray, String username) {
         for (int i = 0; i < clienteArray.length; i++) {
             if (clienteArray != null) {
@@ -441,6 +456,7 @@ public class Main {
         }
         return null;
     }
+
     //buscamos en la matriz de clientes para mostrar la informacion del cliente buscado esto es de la parte de buscar cliente
     public static void buscarCliente(Cliente[] clienteArray, String ID, String email, String remplazo) {
         // Buscamos
@@ -526,6 +542,7 @@ public class Main {
             }
         }
     }
+
     // aqui igual el verificado es para utilizarlo en la parte de llenar informacion
     //Anyelo
     public static boolean verificarCorreo(String email) {
