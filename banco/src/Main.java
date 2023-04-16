@@ -2,19 +2,19 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 /**
  *
- * @author Jostin
+ * @author Anyelo Y Jostin
  */
 public class Main {
     public static void main(String[] args) {
-//Listas
-//----------------------------------------------------------------------
+    //Listas
+    //----------------------------------------------------------------------
         Cliente[] clienteArray = new Cliente[30];
-//Llamado de Funciones Principales
-//----------------------------------------------------------------------
+    //Llamado de Funciones Principales
+    //----------------------------------------------------------------------
         mostrarMenuPrincipal(clienteArray);
     }
     //Funciones Generales
-//----------------------------------------------------------------------
+    //----------------------------------------------------------------------
     public static int menuGenerico(String mensaje, String titulo, int imagen, String opciones[]) {
         //Menu con botones
         return JOptionPane.showOptionDialog(null, mensaje, titulo, JOptionPane.DEFAULT_OPTION, imagen, null, opciones, opciones[0]);
@@ -136,7 +136,12 @@ public class Main {
     //Generar Clientes Aleatorios Sin Input
     public static void createRandomClientes(Cliente[] clienteArray) {
         int numClientes = 0;
-        numClientes = Integer.parseInt(JOptionPane.showInputDialog("Cuantos Clientes desea crear?: "));
+        String input = JOptionPane.showInputDialog("Cuantos Clientes desea crear?: ");
+        if (input == null) {
+            JOptionPane.showMessageDialog(null, "Operación cancelada");
+            return;
+        }
+        numClientes = Integer.parseInt(input);
         if (indexDatos(clienteArray) == -1) {
             JOptionPane.showMessageDialog(null, "Limite de clientes alcanzado");
             return;
@@ -258,6 +263,7 @@ public class Main {
             System.out.println(clienteArray[i].info());
         }
     }
+
     public static void validateLogin(Cliente[] clienteArray, String username) {
         boolean areClientes = areThereClientes(clienteArray);
         if (!areClientes) {
@@ -279,7 +285,6 @@ public class Main {
                     count++;
                 }
             }
-            //JOptionPane.showMessageDialog(null, "Hay " + count + " clientes en el sistema");
             if (username.equals("")) {
                 username = JOptionPane.showInputDialog("Usuario del cliente: ");
             }

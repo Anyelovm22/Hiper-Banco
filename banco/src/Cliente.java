@@ -112,24 +112,31 @@ public class Cliente {
     //}
 
 
-    public String getTarjetaAcceso() {  //CAMBIAR FORMATO Y
+    public String getTarjetaAcceso() {
         String acceso = "";
         acceso += "\n";
+        char[] columns = {'A', 'B', 'C', 'D', 'E'};
+
+        // Display column letters
+        acceso += "    ";
+        for (int j = 0; j < 5; j++) {
+            acceso += "[" + columns[j] + "] ";
+        }
+        acceso += "\n";
+
+        int[][] tarjeta = generarTarjetaAcceso(); // Retrieve the tarjetaAcceso matrix
+
+        // Display row numbers and tarjetaAcceso values
         for (int i = 0; i < 4; i++) {
-            acceso += "[";
+            acceso += "[" + (i + 1) + "] ";
             for (int j = 0; j < 5; j++) {
-                acceso += "[" + tarjetaAcceso[i][j] + "]";
+                acceso += "[" + tarjeta[i][j] + "] "; // Update the value with tarjetaAcceso matrix value
             }
-            acceso += "]\n";
+            acceso += "\n";
         }
         return acceso;
     }
 
-//    public void setTarjetaAcceso(int[][] tarjetaAcceso) {
-//        this.tarjetaAcceso = tarjetaAcceso;
-//    }
-
-    //Generamos la tarjeta de acceso aleatorio
 
     private int[][] generarTarjetaAcceso() {
         int[][] tarjeta = new int[4][5];
