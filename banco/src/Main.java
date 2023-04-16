@@ -278,7 +278,11 @@ public class Main {
             }
             Cliente temporal = buscarClienteUsuario(clienteArray, username);
             if (temporal != null) {
-                validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
+                boolean accesGrant =  validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
+                if (accesGrant){
+                    mostrarMenuClientes(clienteArray);
+                }
+
             } else {
                 int opt = menuGenerico(
                         "El cliente con el usuario: " + username + " no está en el sistema",
@@ -286,13 +290,11 @@ public class Main {
                         JOptionPane.WARNING_MESSAGE,
                         new String[]{"Intentarlo de nuevo", "Cancelar"});
                 if (opt == 0) {
-                    validateLogin(clienteArray, "");
+                     validateLogin(clienteArray, "");
                 }
             }
         }
     }
-
-    //TEST
     public static boolean validateAccessCard(Cliente cliente) {
         int[][] accessCard = cliente.getTarjetaAcceso();
         int successfulAttempts = 0; // Counter for successful attempts
@@ -330,7 +332,7 @@ public class Main {
                 // Validate input against access card value
                 if (inputValue == accessCardValue) {
                     JOptionPane.showMessageDialog(null,
-                            "¡Acceso concedido!",
+                            "¡Acceso concedido!" + " Intento numero: " + (successfulAttempts + 1),
                             "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
                     successfulAttempts++; // Increment successful attempts counter
                 } else {
@@ -345,6 +347,8 @@ public class Main {
 
         // Check if all three attempts were successful
         if (successfulAttempts == 3) {
+            System.out.println("Bienvenido al sistema"+ cliente.getNombre());
+            JOptionPane.showMessageDialog(null,"Bienvenido al sistema "+ cliente.getNombre());
             return true; // Grant access
         } else {
             return false; // Deny access
