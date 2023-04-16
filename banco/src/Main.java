@@ -9,17 +9,18 @@ public class Main {
     //Listas
     //----------------------------------------------------------------------
         Cliente[] clienteArray = new Cliente[30];
+        //Cliente clienteToValidate = clienteArray[0];
     //Llamado de Funciones Principales
     //----------------------------------------------------------------------
         mostrarMenuPrincipal(clienteArray);
     }
     //Funciones Generales
     //----------------------------------------------------------------------
-    public static int menuGenerico(String mensaje, String titulo, int imagen, String opciones[]) {
+    public static int menuGenerico(String mensaje, String titulo, int imagen, String[] opciones) {
         //Menu con botones
         return JOptionPane.showOptionDialog(null, mensaje, titulo, JOptionPane.DEFAULT_OPTION, imagen, null, opciones, opciones[0]);
     }
-    public static Object listaMenuGenerico(String mensaje, String titulo, int imagen, String opciones[]) {
+    public static Object listaMenuGenerico(String mensaje, String titulo, int imagen, String[] opciones) {
         //Menu en lista
         return JOptionPane.showInputDialog(null, mensaje, titulo, imagen, null, opciones, opciones[0]);
     }
@@ -36,7 +37,7 @@ public class Main {
                 case 0 ->
                         mostrarMenuBanco(clienteArray);
                 case 1 ->
-                        validateLogin(clienteArray, "");
+                        validateLogin(clienteArray, "" );
                 case 2 ->
                         JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
             }
@@ -62,29 +63,23 @@ public class Main {
                     JOptionPane.showMessageDialog(null, "Mostrar clientes");
                     mostrarClientes(clienteArray);
                 }
-                case "Mostrar cuentas y movimientos" -> {               //NO MUESTRA AUN
-                    JOptionPane.showMessageDialog(null, "Mostrar cuentas y movimientos");
-                }
+                case "Mostrar cuentas y movimientos" -> //NO MUESTRA AUN
+                        JOptionPane.showMessageDialog(null, "Mostrar cuentas y movimientos");
                 case "Agregar nuevo cliente" -> {
                     JOptionPane.showMessageDialog(null, "Agregar nuevo cliente");
                     agregarCliente(clienteArray, "");
                 }
-                case "Agregar nueva cuenta" -> {                        //NO MUESTRA
-                    JOptionPane.showMessageDialog(null, "Agregar nueva cuenta");
-                }
+                case "Agregar nueva cuenta" -> //NO MUESTRA
+                        JOptionPane.showMessageDialog(null, "Agregar nueva cuenta");
                 case "Buscar cliente" -> {
                     JOptionPane.showMessageDialog(null, "Buscar cliente");
                     buscarCliente(clienteArray, "", "", "");
                 }
-                case "Buscar cuenta" -> {                               //NO MUESTRA
-                    JOptionPane.showMessageDialog(null, "Buscar cuenta");
-                }
-                case "Generar reportes" -> {                            //NO MUESTRA
-                    JOptionPane.showMessageDialog(null, "Generar reportes");
-                }
-                case "Salir del menú bancario" -> {
-                    JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
-                }
+                case "Buscar cuenta" -> //NO MUESTRA
+                        JOptionPane.showMessageDialog(null, "Buscar cuenta");
+                case "Generar reportes" -> //NO MUESTRA
+                        JOptionPane.showMessageDialog(null, "Generar reportes");
+                case "Salir del menú bancario" -> JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
             }
         } while (!choice.equals(BANCO_MENU_OPTIONS[BANCO_MENU_OPTIONS.length - 1]));//Compara si el usuario ha elegido o no la opcion "Salir", si no la ha elegido el loop seguira.
         //Solo funciona con Strings
@@ -119,8 +114,8 @@ public class Main {
             return false;
         }
         int count = 0;
-        for (int i = 0; i < clienteArray.length; i++) {
-            if (clienteArray[i] != null && !clienteArray[i].getID().equals("")) {
+        for (Cliente cliente : clienteArray) {
+            if (cliente != null && !cliente.getID().equals("")) {
                 count++;
             }
         }
@@ -135,7 +130,7 @@ public class Main {
     private static int userNumber = 40;
     //Generar Clientes Aleatorios Sin Input
     public static void createRandomClientes(Cliente[] clienteArray) {
-        int numClientes = 0;
+        int numClientes;
         String input = JOptionPane.showInputDialog("Cuantos Clientes desea crear?: ");
         if (input == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada");
@@ -161,7 +156,7 @@ public class Main {
             String nombre = nombres[random.nextInt(nombres.length)] + " " + apellidos[random.nextInt(apellidos.length)];
             String phone = "3" + String.format("%08d", random.nextInt(99999999));
             // Email validation
-            String email = "";
+            String email;
             boolean isEmailDuplicate = false;
             do {
                 email = nombre.split(" ")[0].toLowerCase() + "." + nombre.split(" ")[1].toLowerCase() + "@" + emails[random.nextInt(emails.length)];
@@ -267,61 +262,26 @@ public class Main {
     public static void validateLogin(Cliente[] clienteArray, String username) {
         boolean areClientes = areThereClientes(clienteArray);
         if (!areClientes) {
-            int opt = menuGenerico("Deseas ser redirigido a crear cliente",
+            int opt = menuGenerico("Deseas ser redirigido a crear cliente?",
                     "Acceso no permitido",
                     JOptionPane.WARNING_MESSAGE,
-                    new String[]{"Agregar un cliente", "Cancelar"});
+                    new String[]{"Crear un cliente", "Cancelar"});
             if (opt == 0) {
                 agregarCliente(clienteArray, "");
-            }else {
+            } else {
                 return;
             }
-
         }
         if (areClientes) {
-            int count = 0;
-            for (int i = 0; i < clienteArray.length; i++) {
-                if (clienteArray[i] != null && !clienteArray[i].getID().equals("")) {
-                    count++;
-                }
-            }
             if (username.equals("")) {
-                username = JOptionPane.showInputDialog("Usuario del cliente: ");
+                username = JOptionPane.showInputDialog("Ingrese el nombre de usuario del cliente: ");
             }
             Cliente temporal = buscarClienteUsuario(clienteArray, username);
             if (temporal != null) {
-/*
-            //String acceso = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
-            //String accessCardInput = JOptionPane.showInputDialog(null, "Bienvenid@ " + temporal.getNombre() + "\n Ingrese su tarjeta de " + temporal.getTarjetaAcceso() + "acceso en el formato XX-XX-XX:");
-            String accessCardInput = JOptionPane.showInputDialog(null, "Ingrese su tarjeta de acceso en el formato XX-XX-XX:");
-            String[] accessCardValues = accessCardInput.split("-");
-            if (accessCardValues.length != 3) {
-                JOptionPane.showMessageDialog(null, "Tarjeta de acceso no válida.");
-            }
-// Compara los datos introducidos con el de la tarjeta de acceso
-            int[][] accessCard = cliente.getTarjetaAcceso();
-            boolean accessCardCorrect = true;
-            for (int i = 0; i < accessCardValues.length; i++) {
-                int value = Integer.parseInt(accessCardValues[i]);
-                boolean valueFound = false;
-                for (int j = 0; j < accessCard[i].length; j++) {
-                    if (accessCard[i][j] == value) {
-                        valueFound = true;
-                        break;
-                    }
-                }
-                if (!valueFound) {
-                    accessCardCorrect = false;
-                    break;
-                }
-            }
-            if (!accessCardCorrect) {
-                JOptionPane.showMessageDialog(null, "Tarjeta de acceso incorrecta.");
-            }
-*/
+                validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
             } else {
                 int opt = menuGenerico(
-                        "El cliente con el usuario: " + username + " no esta en el sistema",
+                        "El cliente con el usuario: " + username + " no está en el sistema",
                         "ID incorrecto",
                         JOptionPane.WARNING_MESSAGE,
                         new String[]{"Intentarlo de nuevo", "Cancelar"});
@@ -329,6 +289,56 @@ public class Main {
                     validateLogin(clienteArray, "");
                 }
             }
+        }
+    }
+
+    //TEST
+    public static boolean validateAccessCard(Cliente cliente) {
+        int[][] accessCard = cliente.getTarjetaAcceso();
+
+// Check if the access card is null
+        if (accessCard == null) {
+            System.out.println("Access card is null.");
+        } else {
+            // Check if the access card is empty
+            if (accessCard.length == 0) {
+                System.out.println("Access card is empty.");
+            } else {
+                System.out.println("Access card is valid.");
+            }
+        }
+        // Get a random position on the access card
+        Random random = new Random();
+        int row = random.nextInt(4); // 4 rows (0 to 3)
+        int col = random.nextInt(5); // 5 columns (0 to 4)
+
+        // Convert column index to letter representation
+        char colLetter = (char) ('A' + col);
+
+        // Show input dialog to prompt user for value at the random position
+        String input = JOptionPane.showInputDialog(null,
+                "Ingrese el valor en la posición " + colLetter + (row + 1) + ":",
+                "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
+
+        if (input != null) {
+            // Convert input to uppercase and get the corresponding value on the access card
+            char inputValue = input.toUpperCase().charAt(0);
+            char accessCardValue = (char) ('A' + cliente.getTarjetaAcceso()[row][col]);
+
+            // Validate input against access card value
+            if (inputValue == accessCardValue) {
+                JOptionPane.showMessageDialog(null,
+                        "¡Acceso concedido!",
+                        "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Acceso denegado. El valor ingresado es incorrecto.",
+                        "Validación de tarjeta de acceso", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } else {
+            return false; // Cancel button was clicked
         }
     }
 
@@ -428,7 +438,7 @@ public class Main {
                         temporal.setStatus(false);
                         buscarCliente(clienteArray, ID, email, remplazo);
                     }
-                } else if (temporal.getStatus()==false) {
+                } else if (!temporal.getStatus()) {
                     int opt3 = menuGenerico(
                             "El estado del cliente es: Inactivo",
                             "Deseas poner en estado Activo",
@@ -459,11 +469,7 @@ public class Main {
     public static boolean verificarCorreo(String email) {
         // Expresión regular para validar el correo electrónico
         String pattern = "[^@]+@[^@]+\\.[^@]+";
-        if (email.matches(pattern)) {
-            return true;
-        } else {
-            return false;
-        }
+        return email.matches(pattern);
 
     }
 }
