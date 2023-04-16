@@ -267,7 +267,10 @@ public class Main {
                     new String[]{"Agregar un cliente", "Cancelar"});
             if (opt == 0) {
                 agregarCliente(clienteArray, "");
+            }else {
+                return;
             }
+
         }
         if (areClientes) {
             int count = 0;
