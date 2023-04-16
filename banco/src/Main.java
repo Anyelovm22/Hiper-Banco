@@ -226,12 +226,7 @@ public class Main {
                 String nombre = JOptionPane.showInputDialog("Nombre del cliente: ");
                 String phone = JOptionPane.showInputDialog("Telefono del cliente\n   Formato: 0000-0000 : ");
                 // Generate username based on the name of the client
-                String[] nombreSplit = nombre.split(" ");
-                String user = "";
-                for (String nombrePart : nombreSplit) {
-                    user += nombrePart.toLowerCase().replaceAll("\\s+", "");
-                }
-                user += userNumber; // Reads userNumber to count the number users
+                String user = nombre.split(" ")[0].toLowerCase()+ userNumber;
                 int index = indexDatos(clienteArray);
                 clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true);
                 JOptionPane.showMessageDialog(null, "-*-*Cliente agregado con exito-*-*");
