@@ -105,25 +105,25 @@ public class Cliente {
 
     //public int[][] getTarjetaAcceso() {
     //    return tarjetaAcceso;
-   // }
+    // }
 
     //public void setTarjetaAcceso(int[][] tarjetaAcceso) {
-        //this.tarjetaAcceso = generarTarjetaAcceso();
+    //this.tarjetaAcceso = generarTarjetaAcceso();
     //}
 
 
-   public String getTarjetaAcceso() {  //CAMBIAR FORMATO Y
-       String acceso = "";
-       acceso += "\n";
+    public String getTarjetaAcceso() {  //CAMBIAR FORMATO Y
+        String acceso = "";
+        acceso += "\n";
         for (int i = 0; i < 4; i++) {
             acceso += "[";
             for (int j = 0; j < 5; j++) {
                 acceso += "[" + tarjetaAcceso[i][j] + "]";
-          }
-           acceso += "]\n";
+            }
+            acceso += "]\n";
         }
         return acceso;
-   }
+    }
 
 //    public void setTarjetaAcceso(int[][] tarjetaAcceso) {
 //        this.tarjetaAcceso = tarjetaAcceso;
