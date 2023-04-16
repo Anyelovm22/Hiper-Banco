@@ -191,7 +191,7 @@ public class Main {
             } while (isEmailDuplicate);
 
             String user = nombre.split(" ")[0].toLowerCase()+ userNumber; // Set username as just the first name without spaces
-            boolean status = random.nextBoolean();
+            boolean status = true;
             int index = indexDatos(clienteArray);
             clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status);
             userNumber++; // Incrementa el número de usuarios para el siguiente usuario
