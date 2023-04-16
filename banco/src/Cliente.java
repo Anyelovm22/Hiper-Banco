@@ -13,7 +13,7 @@ public class Cliente {
     private int[] numerosCuenta;
 
 
-    public Cliente(String ID, String nombre, String phone, String email, String user, boolean status) {
+    public Cliente(String ID, String nombre, String phone, String email, String user, boolean status, String clave) {
         this.ID = ID;
         this.nombre = nombre;
         this.phone = phone;
@@ -87,14 +87,15 @@ public class Cliente {
         this.clave = clave;
     }
 
-    public String getNumerosCuenta() {
+
+        public String getNumerosCuenta() { //Aca da error por que numeros de cuenta es un int[] y aca lo esta retornando como String.
         String cuenta = "";
         for (int i = 0; i < 5; i++) {
             cuenta += "[" + numerosCuenta[i] + "]";
         }
         cuenta += "]\n";
 
-        return cuenta;
+        return numerosCuenta = cuenta;
     }
 
 

@@ -9,7 +9,6 @@ public class Main {
         //Listas
         //----------------------------------------------------------------------
         Cliente[] clienteArray = new Cliente[30];
-        //Cliente clienteToValidate = clienteArray[0];
         //Llamado de Funciones Principales
         //----------------------------------------------------------------------
         mostrarMenuPrincipal(clienteArray);
@@ -71,7 +70,7 @@ public class Main {
                 }
                 case "Agregar nueva cuenta" -> {//NO MUESTRA
                     JOptionPane.showMessageDialog(null, "Agregar nueva cuenta");
-                    agregarCuenta(clienteArray,"");
+//                    agregarCuenta(clienteArray,"");
                 }
                 case "Buscar cliente" -> {
                     JOptionPane.showMessageDialog(null, "Buscar cliente");
@@ -183,8 +182,9 @@ public class Main {
             } while (isEmailDuplicate);
             String user = nombre.split(" ")[0].toLowerCase()+ userNumber; // Set username as just the first name without spaces
             boolean status = true;
+            String clave = "";
             int index = indexDatos(clienteArray);
-            clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status);
+            clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status,clave);
             userNumber++; // Incrementa el número de usuarios para el siguiente usuario
         }
         JOptionPane.showMessageDialog(null, "Clientes generados aleatoriamente");
@@ -224,7 +224,7 @@ public class Main {
             int index = indexDatos(clienteArray);
             JOptionPane.showMessageDialog(null, "-*-*Cliente agregado con exito-*-*");
             clienteArray[index] = new Cliente(ID, temporal.getNombre(), temporal.getNombre(), temporal.getNombre(),
-                    temporal.getNumerosCuenta(), true);
+                    temporal.getNumerosCuenta(), true);//Aca el error es por el constructor falta agregar la clave
             System.out.println(clienteArray[index].info());
         } else {
             //boton el cual indica que el ID esta en el sistema, asi nif (ID.equals("")) {
@@ -281,7 +281,8 @@ public class Main {
                 // Generate username based on the name of the client
                 String user = nombre.split(" ")[0].toLowerCase()+ userNumber;
                 int index = indexDatos(clienteArray);
-                clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true);
+                String clave = "";
+                clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true, clave);
                 JOptionPane.showMessageDialog(null, "-*-*Cliente agregado con exito-*-*");
                 System.out.println(clienteArray[index].info());
                 userNumber++; // Increment userNumber for the next user
@@ -331,7 +332,10 @@ public class Main {
             }
             Cliente temporal = buscarClienteUsuario(clienteArray, username);
             if (temporal != null) {
-                validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
+                boolean grantAcces = validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
+                if (grantAcces){
+                    mostrarMenuClientes(clienteArray);
+                }
             } else {
                 int opt = menuGenerico(
                         "El cliente con el usuario: " + username + " no está en el sistema",
