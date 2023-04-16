@@ -192,6 +192,7 @@ public class Main {
 
     private static int accountNumber = 4710;
 
+
     //Registro de Cuenta Manualmente
     public static void agregarCuenta(Cliente[] clienteArray,String ID){
         int[] cuentas = new int[5];
