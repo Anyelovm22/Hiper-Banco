@@ -223,14 +223,14 @@ public class Main {
                 if (index != 0) {
                     //index += 1;
                 }
-                for (int i = index; i < cantidad+index; i++) {
+                for (int i = index; i < cantidad + index; i++) {
                     cuentas[i] = accountNumber + 1; // agregar cuenta al arreglo
                     accountNumber++; // incrementar contador de cuentas agregadas
                 }
                 JOptionPane.showMessageDialog(null, "Cuentas agregadas:");
                 for (int i = 0; i < cuentas.length; i++) {
-                    JOptionPane.showMessageDialog(null,"Las cuentas del cliente"+temporal.getNombre()+
-                            "["+ cuentas[i] +"]");
+                    JOptionPane.showMessageDialog(null, "Las cuentas del cliente" + temporal.getNombre() +
+                            "[" + cuentas[i] + "]");
                 }
             }
         } else {
@@ -336,6 +336,11 @@ public class Main {
             Cliente temporal = buscarClienteUsuario(clienteArray, username);
             if (temporal != null) {
                 validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
+                boolean accesGrant =  validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
+                if (accesGrant){
+                    mostrarMenuClientes(clienteArray);
+                }
+
             } else {
                 int opt = menuGenerico(
                         "El cliente con el usuario: " + username + " no está en el sistema",
@@ -343,6 +348,7 @@ public class Main {
                         JOptionPane.WARNING_MESSAGE,
                         new String[]{"Intentarlo de nuevo", "Cancelar"});
                 if (opt == 0) {
+                    validateLogin(clienteArray, "");
                     validateLogin(clienteArray, "");
                 }
             }
@@ -388,6 +394,7 @@ public class Main {
                 if (inputValue == accessCardValue) {
                     JOptionPane.showMessageDialog(null,
                             "¡Acceso concedido!",
+                            "¡Acceso concedido!" + " Intento numero: " + (successfulAttempts + 1),
                             "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
                     successfulAttempts++; // Increment successful attempts counter
                 } else {
@@ -402,6 +409,8 @@ public class Main {
 
         // Check if all three attempts were successful
         if (successfulAttempts == 3) {
+            System.out.println("Bienvenido al sistema" + cliente.getNombre());
+            JOptionPane.showMessageDialog(null, "Bienvenido al sistema " + cliente.getNombre());
             return true; // Grant access
         } else {
             return false; // Deny access

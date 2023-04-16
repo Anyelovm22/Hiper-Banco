@@ -96,11 +96,7 @@ public class Cliente {
         this.numerosCuenta = numerosCuenta;
     }
 
-    public int[][] getTarjetaAcceso() {
-        return tarjetaAcceso;
-    }
-
-    public String tomarTarjetaString() {
+    public String getTarjetaAcceso() {
         String acceso = "";
         acceso += "\n";
         char[] columns = {'A', 'B', 'C', 'D', 'E'};
