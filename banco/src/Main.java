@@ -295,50 +295,59 @@ public class Main {
     //TEST
     public static boolean validateAccessCard(Cliente cliente) {
         int[][] accessCard = cliente.getTarjetaAcceso();
+        int successfulAttempts = 0; // Counter for successful attempts
 
-// Check if the access card is null
-        if (accessCard == null) {
-            System.out.println("Access card is null.");
-        } else {
-            // Check if the access card is empty
-            if (accessCard.length == 0) {
-                System.out.println("Access card is empty.");
+        // Loop to prompt for values three times
+        while (successfulAttempts < 3) {
+            // Get a random position on the access card
+            Random random = new Random();
+            int row = random.nextInt(4); // 4 rows (0 to 3)
+            int col = random.nextInt(5); // 5 columns (0 to 4)
+
+            // Convert column index to letter representation
+            char colLetter = (char) ('A' + col);
+
+            // Show input dialog to prompt user for value at the random position
+            String input = JOptionPane.showInputDialog(null,
+                    "Ingrese el valor en la posición " + colLetter + (row + 1) + ":",
+                    "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
+
+            if (input != null) {
+                // Parse input to integer
+                int inputValue;
+                try {
+                    inputValue = Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null,
+                            "Acceso denegado. El valor ingresado es incorrecto.",
+                            "Validación de tarjeta de acceso", JOptionPane.ERROR_MESSAGE);
+                    continue; // Prompt again if input is invalid
+                }
+
+                // Get the corresponding value on the access card
+                int accessCardValue = cliente.getTarjetaAcceso()[row][col];
+
+                // Validate input against access card value
+                if (inputValue == accessCardValue) {
+                    JOptionPane.showMessageDialog(null,
+                            "¡Acceso concedido!",
+                            "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
+                    successfulAttempts++; // Increment successful attempts counter
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Acceso denegado. El valor ingresado es incorrecto.",
+                            "Validación de tarjeta de acceso", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
-                System.out.println("Access card is valid.");
+                break; // Cancel button was clicked, exit loop
             }
         }
-        // Get a random position on the access card
-        Random random = new Random();
-        int row = random.nextInt(4); // 4 rows (0 to 3)
-        int col = random.nextInt(5); // 5 columns (0 to 4)
 
-        // Convert column index to letter representation
-        char colLetter = (char) ('A' + col);
-
-        // Show input dialog to prompt user for value at the random position
-        String input = JOptionPane.showInputDialog(null,
-                "Ingrese el valor en la posición " + colLetter + (row + 1) + ":",
-                "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
-
-        if (input != null) {
-            // Convert input to uppercase and get the corresponding value on the access card
-            char inputValue = input.toUpperCase().charAt(0);
-            char accessCardValue = (char) ('A' + cliente.getTarjetaAcceso()[row][col]);
-
-            // Validate input against access card value
-            if (inputValue == accessCardValue) {
-                JOptionPane.showMessageDialog(null,
-                        "¡Acceso concedido!",
-                        "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
-                return true;
-            } else {
-                JOptionPane.showMessageDialog(null,
-                        "Acceso denegado. El valor ingresado es incorrecto.",
-                        "Validación de tarjeta de acceso", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
+        // Check if all three attempts were successful
+        if (successfulAttempts == 3) {
+            return true; // Grant access
         } else {
-            return false; // Cancel button was clicked
+            return false; // Deny access
         }
     }
 
