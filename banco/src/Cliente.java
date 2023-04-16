@@ -19,10 +19,9 @@ public class Cliente {
         this.phone = phone;
         this.email = email;
         this.user = user;
-//      this.user = generarUsuario(nombre);
         this.status = status;
         this.clave = "";
-        this.tarjetaAcceso = generarTarjetaAcceso();
+        this.tarjetaAcceso = generarTarjetaAcceso(); // Generate the access card only once
         this.numerosCuenta = numerosCuenta;
     }
 
@@ -103,40 +102,9 @@ public class Cliente {
         this.numerosCuenta = numerosCuenta;
     }
 
-    //public int[][] getTarjetaAcceso() {
-    //    return tarjetaAcceso;
-    // }
-
-    //public void setTarjetaAcceso(int[][] tarjetaAcceso) {
-    //this.tarjetaAcceso = generarTarjetaAcceso();
-    //}
-
-
-    public String getTarjetaAcceso() {
-        String acceso = "";
-        acceso += "\n";
-        char[] columns = {'A', 'B', 'C', 'D', 'E'};
-
-        // Display column letters
-        acceso += "    ";
-        for (int j = 0; j < 5; j++) {
-            acceso += "[" + columns[j] + "] ";
-        }
-        acceso += "\n";
-
-        int[][] tarjeta = generarTarjetaAcceso(); // Retrieve the tarjetaAcceso matrix
-
-        // Display row numbers and tarjetaAcceso values
-        for (int i = 0; i < 4; i++) {
-            acceso += "[" + (i + 1) + "] ";
-            for (int j = 0; j < 5; j++) {
-                acceso += "[" + tarjeta[i][j] + "] "; // Update the value with tarjetaAcceso matrix value
-            }
-            acceso += "\n";
-        }
-        return acceso;
+    public int[][] getTarjetaAcceso() {
+        return tarjetaAcceso;
     }
-
 
     private int[][] generarTarjetaAcceso() {
         int[][] tarjeta = new int[4][5];
@@ -149,11 +117,33 @@ public class Cliente {
         return tarjeta;
     }
 
-    public String info (){
-        return   "-*-*-*-*-*-*-*-*-*-*-*\n"
-                + " El id del cliente es: " + getID() + "\n El nombre completo del cliente es: "
-                + getNombre() + "\n El telefono del cliente es: " + getPhone()
-                + "\n El correo del cliente es: " + getEmail() + "\n El usuario del cliente: "
-                + getUser() + "\n El estado del cliente es: "+ getStatus() +"\nTarjeta de acceso\n" + getTarjetaAcceso();
+
+    public String info() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-*-*-*-*-*-*-*-*-*-*-*\n")
+                .append(" El id del cliente es: ").append(getID()).append("\n El nombre completo del cliente es: ")
+                .append(getNombre()).append("\n El telefono del cliente es: ").append(getPhone())
+                .append("\n El correo del cliente es: ").append(getEmail()).append("\n El usuario del cliente: ")
+                .append(getUser()).append("\n El estado del cliente es: ").append(getStatus()).append("\nTarjeta de acceso\n");
+
+        int[][] tarjeta = getTarjetaAcceso(); // Retrieve the tarjetaAcceso matrix
+
+        char[] columns = {'A', 'B', 'C', 'D', 'E'};
+        sb.append("    ");
+        for (int j = 0; j < 5; j++) {
+            sb.append("[").append(columns[j]).append("] ");
+        }
+        sb.append("\n");
+
+        for (int i = 0; i < 4; i++) {
+            sb.append("[").append(i + 1).append("] ");
+            for (int j = 0; j < 5; j++) {
+                sb.append("[").append(tarjeta[i][j]).append("] ");
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
     }
+
 }
