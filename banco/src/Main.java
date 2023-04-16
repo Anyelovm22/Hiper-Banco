@@ -141,7 +141,6 @@ public class Main {
     }
     // Declare userNumber as a class-level variable
     private static int userNumber = 40;
-
     //Generar Clientes Aleatorios Sin Input
     public static void createRandomClientes(Cliente[] clienteArray) {
         int numClientes = 0;
@@ -156,17 +155,42 @@ public class Main {
             return;
         }
         Random random = new Random();
+        String[] emails = {"gmail.com", "yahoo.com", "hotmail.com   ", "outlook.com"};
         String[] nombres = {"Esteban", "Fatima", "Anthonny", "Anyelo", "Juan", "Maria", "Luis", "Ana", "Pablo", "Carla", "Sofia", "Pedro", "Marta", "Diego", "Lucia", "Felipe", "Laura", "Carlos", "Camila", "Jorge", "Isabela", "Gustavo", "Valentina", "Lina", "Andres", "Mariana", "Fabio", "Paola", "Ricardo", "Tatiana", "Gabriel", "Juliana", "Alejandro", "Natalia", "Simon", "Victoria", "Lorenzo", "Jimena", "Emilio", "Daniela", "Roberto", "Olivia", "Mateo", "Agustina", "Ignacio"};
         String[] apellidos = {"Chinchilla", "Perez", "Merlo", "Vargas", "Gonzalez", "Rodriguez", "Gomez", "Fernandez", "Perez", "Martinez", "Lopez", "Sanchez", "Romero", "Sosa", "Alvarez", "Diaz", "Torres", "Ruiz", "Hernandez", "Flores", "Acosta", "Silva", "Ramirez", "Molina", "Ortega", "Nunez", "Cabrera", "Garcia", "Castillo", "Vega", "Benitez", "Vargas", "Miranda", "Castro", "Morales", "Vazquez", "Gutierrez", "Aguilar", "Rojas", "Soto", "Alonso", "Valdez", "Luna", "Gimenez", "Ferrari", "Leiva", "Maldonado"};
-        String[] emails = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"};
 
         for (int i = 0; i < numClientes; i++) {
             int id = random.nextInt(900000000) + 100000000;
             String ID = String.valueOf(id);
             String nombre = nombres[random.nextInt(nombres.length)] + " " + apellidos[random.nextInt(apellidos.length)];
             String phone = "3" + String.format("%08d", random.nextInt(99999999));
-            String email = nombre.split(" ")[0].toLowerCase() + "." + nombre.split(" ")[1].toLowerCase() + "@" + emails[random.nextInt(emails.length)];
-            String user = nombre.replaceAll("\\s+", "").toLowerCase() + userNumber; // Generar nombre de usuario basado en nombre y userNumber
+
+            // Email validation
+            String email = "";
+            boolean isEmailDuplicate = false;
+            do {
+                email = nombre.split(" ")[0].toLowerCase() + "." + nombre.split(" ")[1].toLowerCase() + "@" + emails[random.nextInt(emails.length)];
+                for (Cliente cliente : clienteArray) {
+                    if (cliente != null && cliente.getEmail().equalsIgnoreCase(email)) {
+                        isEmailDuplicate = true;
+                        break;
+                    }
+                }
+                if (isEmailDuplicate) {
+                    String[] emailParts = email.split("@");
+                    String emailName = emailParts[0];
+                    String emailDomain = emailParts[1];
+                    int randomNum = random.nextInt(100);
+                    if (randomNum < 50) {
+                        emailName += "_" + random.nextInt(100);
+                    } else {
+                        emailName += "-" + (char) (random.nextInt(26) + 'a');
+                    }
+                    email = emailName + "@" + emailDomain;
+                }
+            } while (isEmailDuplicate);
+
+            String user = nombre.split(" ")[0].toLowerCase()+ userNumber; // Set username as just the first name without spaces
             boolean status = random.nextBoolean();
             int index = indexDatos(clienteArray);
             clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status);
@@ -176,33 +200,76 @@ public class Main {
     }
 
 
+    //Registro de Clientes Manualmente
+    public static void agregarCliente(Cliente[] clienteArray, String email) {
+        //El if lo que realiza es un index del vector si el vector esta lleno nos indicara que el limite esta lleno
+        if (indexDatos(clienteArray) == -1) {
+            JOptionPane.showMessageDialog(null, "Limite de clientes alcanzado");
+            return;
+        }
+        if (email.equals("")) {
+            boolean isDuplicateEmail = true;
+            while (isDuplicateEmail) {
+                email = JOptionPane.showInputDialog("Correo del cliente: ");
+                // Verificar si el email ya está en uso por otro cliente en clienteArray
+                boolean isEmailDuplicate = false;
+                for (Cliente cliente : clienteArray) {
+                    if (cliente != null && cliente.getEmail().equals(email)) {
+                        isEmailDuplicate = true;
+                        break;
+                    }
+                }
 
-//    public static void createRandomClientes(Cliente[] clienteArray) {
-//        int numClientes = 0;
-//        //Generar Clientes Aleatorios Sin Input
-//        if (indexDatos(clienteArray) == -1) {
-//            JOptionPane.showMessageDialog(null,
-//                    "Limite de clientes alcansado");
-//            return;
-//        }
-//        numClientes = Integer.parseInt(JOptionPane.showInputDialog("Cuantos Clientes desea crear?: "));
-//        Random random = new Random();
-//        String[] nombres = {"Esteban", "Fatima", "Anthonny", "Anyelo", "Juan", "Maria", "Luis", "Ana", "Pablo", "Carla", "Sofia", "Pedro", "Marta", "Diego", "Lucia", "Felipe", "Laura", "Carlos", "Camila", "Jorge", "Isabela", "Gustavo", "Valentina", "Lina", "Andres", "Mariana", "Fabio", "Paola", "Ricardo", "Tatiana", "Gabriel", "Juliana", "Alejandro", "Natalia", "Simon", "Victoria", "Lorenzo", "Jimena", "Emilio", "Daniela", "Roberto", "Olivia", "Mateo", "Agustina", "Ignacio"};
-//        String[] apellidos = {"Chinchilla", "Perez", "Merlo", "Vargas", "Gonzalez", "Rodriguez", "Gomez", "Fernandez", "Perez", "Martinez", "Lopez", "Sanchez", "Romero", "Sosa", "Alvarez", "Diaz", "Torres", "Ruiz", "Hernandez", "Flores", "Acosta", "Silva", "Ramirez", "Molina", "Ortega", "Nunez", "Cabrera", "Garcia", "Castillo", "Vega", "Benitez", "Vargas", "Miranda", "Castro", "Morales", "Vazquez", "Gutierrez", "Aguilar", "Rojas", "Soto", "Alonso", "Valdez", "Luna", "Gimenez", "Ferrari", "Leiva", "Maldonado"};
-//        String[] emails = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"};
-//        for (int i = 0; i < numClientes; i++) {
-//            int id = random.nextInt(900000000) + 100000000;
-//            String ID = String.valueOf(id);
-//            String nombre = nombres[random.nextInt(nombres.length)] + " " + apellidos[random.nextInt(apellidos.length)];
-//            String phone = "3" + String.format("%08d", random.nextInt(99999999));
-//            String email = nombre.split(" ")[0].toLowerCase() + "." + nombre.split(" ")[1].toLowerCase() + "@" + emails[random.nextInt(emails.length)];
-//            String user = nombre.split(" ")[0];
-//            boolean status = random.nextBoolean();
-//            int index = indexDatos(clienteArray);
-//            clienteArray[index] = new Cliente(ID, nombre, phone, email, user, status);
-//        }
-//        JOptionPane.showMessageDialog(null, "Clientes generados aleatoriamente");
-//    }
+                if (isEmailDuplicate) {
+                    int opt = menuGenerico("El email: " + email + " ya está en uso por otro cliente",
+                            "Email Duplicado",
+                            JOptionPane.WARNING_MESSAGE,
+                            new String[]{"Nuevo email", "Cancelar"});
+                    if (opt == 1) {
+                        return; // Cancelar el ingreso de la información
+                    }
+                } else {
+                    isDuplicateEmail = false;
+                }
+            }
+        }
+        // Aqui se realiza la verificaion del ID si el ID esta repetido nos mandara a un else que es un boton
+        if (verificarCorreo(email)) { // TRUE or FALSE
+            String ID = JOptionPane.showInputDialog("Id del cliente: ");
+            if (buscarClienteId(clienteArray, ID) == null) {
+                String nombre = JOptionPane.showInputDialog("Nombre del cliente: ");
+                String phone = JOptionPane.showInputDialog("Telefono del cliente\n   Formato: 0000-0000 : ");
+
+                // Generate username based on the name of the client
+                String[] nombreSplit = nombre.split(" ");
+                String user = "";
+                for (String nombrePart : nombreSplit) {
+                    user += nombrePart.toLowerCase().replaceAll("\\s+", "");
+                }
+                user += userNumber; // Reads userNumber to count the number users
+
+                int index = indexDatos(clienteArray);
+                clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true);
+                JOptionPane.showMessageDialog(null, "-*-*Cliente agregado con exito-*-*");
+                System.out.println(clienteArray[index].info());
+                userNumber++; // Increment userNumber for the next user
+            } else {
+                //boton el cual indica que el ID esta en el sistema, asi nos dara dos opciones
+                //agregar otro ID o cancelar el ingreso de la informacion
+                int opt = menuGenerico("El cliente con el id: " + ID + " ya esta en el sistema", "Codigo Repetido",
+                        JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo codigo", "Cancelar" });
+                if (opt == 0) {
+                    agregarCliente(clienteArray, email);
+                }
+            }
+        } else {
+            int opt = menuGenerico("El cliente con el email: " + email + " es incorrecto", "Email invalido",
+                    JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo email", "Cancelar" });
+            if (opt == 0) {
+                agregarCliente(clienteArray, "");
+            }
+        }
+    }
 
     //Mostrar informacion de todos los clientes agreagdos anteriormente es de la parte de mostrar clientes
     //Anyelo
@@ -217,7 +284,7 @@ public class Main {
     public static void validateLogin(Cliente[] clienteArray, String username) {
         boolean areClientes = areThereClientes(clienteArray);
         if (!areClientes) {
-            int opt = mostrarBotones("Deseas ser redirigido a crear cliente",
+            int opt = menuGenerico("Deseas ser redirigido a crear cliente",
                     "Acceso no permitido",
                     JOptionPane.WARNING_MESSAGE,
                     new String[]{"Agregar un cliente", "Cancelar"});
@@ -270,7 +337,7 @@ public class Main {
             }
 */
             } else {
-                int opt = mostrarBotones(
+                int opt = menuGenerico(
                         "El cliente con el usuario: " + username + " no esta en el sistema",
                         "ID incorrecto",
                         JOptionPane.WARNING_MESSAGE,
@@ -288,53 +355,8 @@ public class Main {
 
     }
 
-    //Registro de Clientes Manualmente
-    public static void agregarCliente(Cliente[] clienteArray, String email) {
-        //El if lo que realiza es un index del vector si el vector esta lleno nos indicara que el limite esta lleno
-        if (indexDatos(clienteArray) == -1) {
-            JOptionPane.showMessageDialog(null, "Limite de clientes alcanzado");
-            return;
-        }
-        if (email.equals("")) {
-            email = JOptionPane.showInputDialog("Correo del cliente: ");
-        }
-        // Aqui se realiza la verificaion del ID si el ID esta repetido nos mandara a un else que es un boton
-        if (verificarCorreo(email)) { // TRUE or FALSE
-            String ID = JOptionPane.showInputDialog("Id del cliente: ");
-            if (buscarClienteId(clienteArray, ID) == null) {
-                String nombre = JOptionPane.showInputDialog("Nombre del cliente: ");
-                String phone = JOptionPane.showInputDialog("Telefono del cliente\n   Formato: 0000-0000 : ");
 
-                // Generate username based on the name of the client
-                String[] nombreSplit = nombre.split(" ");
-                String user = "";
-                for (String nombrePart : nombreSplit) {
-                    user += nombrePart.toLowerCase().replaceAll("\\s+", "");
-                }
-                user += userNumber; // Reads userNumber to count the number users
 
-                int index = indexDatos(clienteArray);
-                clienteArray[index] = new Cliente(ID, nombre, phone, email, user, true);
-                JOptionPane.showMessageDialog(null, "-*-*Cliente agregado con exito-*-*");
-                System.out.println(clienteArray[index].info());
-                userNumber++; // Increment userNumber for the next user
-            } else {
-                //boton el cual indica que el ID esta en el sistema, asi nos dara dos opciones
-                //agregar otro ID o cancelar el ingreso de la informacion
-                int opt = mostrarBotones("El cliente con el id: " + ID + " ya esta en el sistema", "Codigo Repetido",
-                        JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo codigo", "Cancelar" });
-                if (opt == 0) {
-                    agregarCliente(clienteArray, email);
-                }
-            }
-        } else {
-            int opt = mostrarBotones("El cliente con el email: " + email + " es incorrecto", "Email invalido",
-                    JOptionPane.WARNING_MESSAGE, new String[] { "Nuevo email", "Cancelar" });
-            if (opt == 0) {
-                agregarCliente(clienteArray, "");
-            }
-        }
-    }
 
 
     //Aqui  lo que se realiza es un ingreso de los datos de los clientes
@@ -518,23 +540,6 @@ public class Main {
         return -1;
     }
 
-    //boton para poder agregar un nuevo Id o correo en este caso
-    public static int mostrarBotones(
-            String mensaje,
-            String titulo,
-            int imagen,
-            String botones[]) {
-        return JOptionPane.showOptionDialog(
-                null,
-                mensaje,
-                titulo,
-                JOptionPane.DEFAULT_OPTION,
-                imagen,
-                null,
-                botones,
-                botones[0]); // 0-1-2-3...
-    }
-
     // el buscar cliente id lo utilizaremos para los botones en la parte de llenar informacion
     //Anyelo
     public static Cliente buscarClienteId(Cliente[] clienteArray, String id) {
@@ -573,13 +578,13 @@ public class Main {
         }
         Cliente temporal = buscarClienteId(clienteArray, ID);
         if (temporal != null) {
-            int opt = mostrarBotones(
+            int opt = menuGenerico(
                     "Elija la opcion que deseas realizar",
                     "Bienvenid@ " + temporal.getNombre(),
                     JOptionPane.WARNING_MESSAGE,
                     new String[]{"[Actualizar Informacion]", "[Activar-Desactivar]", "[Botones de Cuentas]", "[Cancelar]"});
             if (opt == 0) {
-                int opt1 = mostrarBotones(
+                int opt1 = menuGenerico(
                         "Elija la opcion que deseas realizar",
                         "",
                         JOptionPane.WARNING_MESSAGE,
@@ -597,7 +602,7 @@ public class Main {
                     if (verificarCorreo(remplazo) == true) {
                         JOptionPane.showMessageDialog(null, "Correo modificado correctamente");
                     } else {
-                        opt1 = mostrarBotones(
+                        opt1 = menuGenerico(
                                 "El cliente con el email: " + email + " es incorrecto",
                                 "Email invalido",
                                 JOptionPane.WARNING_MESSAGE,
@@ -610,7 +615,7 @@ public class Main {
             }
             if (opt == 1) {
                 if (temporal.getStatus() == true) {
-                    int opt2 = mostrarBotones(
+                    int opt2 = menuGenerico(
                             "El estado del cliente es: Activo",
                             "Deseas poner en estado Inactivo",
                             JOptionPane.WARNING_MESSAGE,
@@ -620,7 +625,7 @@ public class Main {
                         buscarCliente(clienteArray, ID, email, remplazo);
                     }
                 } else if (temporal.getStatus() == false) {
-                    int opt3 = mostrarBotones(
+                    int opt3 = menuGenerico(
                             "El estado del cliente es: Activo",
                             "Deseas poner en estado Inactivo",
                             JOptionPane.WARNING_MESSAGE,
@@ -636,7 +641,7 @@ public class Main {
                 System.out.println("Botones de Cuentas");
             }
         } else {
-            int opt = mostrarBotones(
+            int opt = menuGenerico(
                     "El cliente con el ID: " + ID + " no esta en el sistema",
                     "ID incorrecto",
                     JOptionPane.WARNING_MESSAGE,
