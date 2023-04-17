@@ -101,9 +101,7 @@ public class Main {
                     JOptionPane.showMessageDialog(null, "Mostrar datos personales");
                     mostrarCliente(clienteArray, username);
                 }
-                case "Modificar datos personales" -> {
-                    JOptionPane.showMessageDialog(null, "Modificar datos personales");
-                }
+                case "Modificar datos personales" -> JOptionPane.showMessageDialog(null, "Modificar datos personales");
                 case "Mostrar cuentas y movimientos" ->
                         JOptionPane.showMessageDialog(null, "Mostrar cuentas y movimientos");
                 case "Salir del menu clientes" ->
@@ -199,7 +197,7 @@ public class Main {
 
     //Registro de Cuenta Manualmente
     public static void agregarCuenta(Cliente[] clienteArray, String ID) {
-        int index = 0;
+        int index;
         if (ID.equals("")) {
             ID = JOptionPane.showInputDialog("Id del cliente: ");
         }
@@ -209,7 +207,8 @@ public class Main {
             int cantidad = Integer.parseInt(JOptionPane.showInputDialog(null, "Bienvenid@ "
                     + temporal.getNombre() + "\n ¿Cuántas cuentas desea agregar? (Ingrese 0 para salir)"));
             if (cantidad == 0) {
-            } else if (cuentas[4] != 0) {
+            }
+            else if (cuentas[4] != 0) {
                 int opt = menuGenerico("El cliente ya tiene 5 cuentas registradas en el sistema",
                         "Codigo Repetido",
                         JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo usuario", "Cancelar"});
@@ -308,6 +307,7 @@ public class Main {
 
     public static void mostrarCliente(Cliente[] clienteArray, String username) {
         Cliente temporal = buscarClienteUsuario(clienteArray, username);
+        assert temporal != null;
         System.out.println(temporal.info());
     }
     //Mostrar informacion de todos los clientes agreagdos anteriormente es de la parte de mostrar clientes
@@ -509,8 +509,7 @@ public class Main {
     }
 
     public static boolean nuevoUsuario(Cliente cliente){
-        boolean nuevoUsuario = cliente.isNewUser();
-        return nuevoUsuario; }
+        return cliente.isNewUser(); }
 
     //Anyelo
     public static int indexDatos(Cliente[] clienteArray) {
