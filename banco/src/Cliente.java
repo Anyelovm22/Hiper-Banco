@@ -9,8 +9,7 @@ public class Cliente {
     private boolean newUser;
     private boolean status;
     private int[][] tarjetaAcceso;
-    private Cuentas cuentas;
-//    private int[] numerosCuenta;
+    private int[] numerosCuenta;
 
 
     public Cliente(String ID, String nombre, String phone, String email, String user, boolean status, String clave, boolean newUser) {
@@ -80,13 +79,13 @@ public class Cliente {
         this.newUser = newUser;
     }
 
-    //    public int[] getNumerosCuenta() {
-//        return numerosCuenta;
-//    }
-//
-//    public void setNumerosCuenta(int[] numerosCuenta) {
-//        this.numerosCuenta = numerosCuenta;
-//    }
+        public int[] getNumerosCuenta() {
+        return numerosCuenta;
+    }
+
+    public void setNumerosCuenta(int[] numerosCuenta) {
+        this.numerosCuenta = numerosCuenta;
+    }
 
     public int[][] getTarjetaAcceso() {
         return tarjetaAcceso;
@@ -103,14 +102,22 @@ public class Cliente {
         }
         return tarjeta;
     }
-
+    private String statusCliente(){
+        String status;
+        if (getStatus()){
+            status = "Activo";
+        }else {
+            status = "Inactivo";
+        }
+    return status;
+    }
     public String info() {
         StringBuilder sb = new StringBuilder();
         sb.append("-*-*-*-*-*-*-*-*-*-*-*\n")
                 .append(" El id del cliente es: ").append(getID()).append("\n El nombre completo del cliente es: ")
                 .append(getNombre()).append("\n El telefono del cliente es: ").append(getPhone())
                 .append("\n El correo del cliente es: ").append(getEmail()).append("\n El usuario del cliente: ")
-                .append(getUser()).append("\n El estado del cliente es: ").append(getStatus()).append("\nTarjeta de acceso\n");
+                .append(getUser()).append("\n El estado del cliente es: " + status).append("\n La clave del cliente es: "+ getClave()).append(getStatus()).append("\nTarjeta de acceso\n");
         int[][] tarjeta = getTarjetaAcceso(); // Retrieve the tarjetaAcceso matrix
         char[] columns = {'A', 'B', 'C', 'D', 'E'};
         sb.append("    ");
