@@ -70,14 +70,16 @@ public class Main {
                 }
                 case "Agregar nueva cuenta" -> {//NO MUESTRA
                     JOptionPane.showMessageDialog(null, "Agregar nueva cuenta");
-//                    agregarCuenta(clienteArray,"");
+                    agregarCuenta(clienteArray,"");
                 }
                 case "Buscar cliente" -> {
                     JOptionPane.showMessageDialog(null, "Buscar cliente");
                     buscarCliente(clienteArray, "", "", "");
                 }
-                case "Buscar cuenta" -> //NO MUESTRA
-                        JOptionPane.showMessageDialog(null, "Buscar cuenta");
+                case "Buscar cuenta" -> {
+                    JOptionPane.showMessageDialog(null, "Buscar cuenta");
+                    encontrarCuenta(clienteArray);
+                }
                 case "Generar reportes" -> //NO MUESTRA
                         JOptionPane.showMessageDialog(null, "Generar reportes");
                 case "Salir del menú bancario" -> JOptionPane.showMessageDialog(null, "Has elegido la opción SALIR");
@@ -192,54 +194,49 @@ public class Main {
 
     private static int accountNumber = 4709;
 
-
     //Registro de Cuenta Manualmente
-//    public static void agregarCuenta(Cliente[] clienteArray, String ID) {
-//        int index;
-//        if (ID.equals("")) {
-//            ID = JOptionPane.showInputDialog("Id del cliente: ");
-//        }
-//        Cliente temporal = buscarClienteId(clienteArray, ID);
-//        if (temporal != null) {
-//            int[] cuentas = temporal.getNumerosCuenta();
-//            int cantidad = Integer.parseInt(JOptionPane.showInputDialog(null, "Bienvenid@ "
-//                    + temporal.getNombre() + "\n ¿Cuántas cuentas desea agregar? (Ingrese 0 para salir)"));
-//            if (cantidad == 0) {
-//            } else if (cuentas[4] != 0) {
-//                JOptionPane.showMessageDialog(null, "El límite de cuentas ha sido alcanzado");
-//                int opt = menuGenerico("El cliente ya tiene 5 cuentas registradas en el sistema",
-//                        "Codigo Repetido",
-//                        JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo usuario", "Cancelar"});
-//                if (opt == 0) {
-//                    agregarCuenta(clienteArray,"");
-//                }
-//            } else if (indexCuenta(cuentas) + 1 + cantidad > 6) {
-//                JOptionPane.showMessageDialog(null, "Estas ingresando un numero mayor" +
-//                        " a la cantidad de la cuenta");
-//            } else {
-//                index = indexCuenta(cuentas);
-//                if (index != 0) {
-//                    //index += 1;
-//                }
-//                for (int i = index; i < cantidad + index; i++) {
-//                    cuentas[i] = accountNumber + 1; // agregar cuenta al arreglo
-//                    accountNumber++; // incrementar contador de cuentas agregadas
-//                }
-//                JOptionPane.showMessageDialog(null, "Cuentas agregadas:");
-//                for (int i = 0; i < cuentas.length; i++) {
-//                    JOptionPane.showMessageDialog(null, "Las cuentas del cliente" + temporal.getNombre() +
-//                            "[" + cuentas[i] + "]");
-//                }
-//            }
-//        } else {
-//            int opt = menuGenerico("El cliente con el id: " + ID + " no esta en el sistema",
-//                    "Codigo Repetido",
-//                    JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo codigo", "Cancelar"});
-//            if (opt == 0) {
-//                agregarCuenta(clienteArray, "");
-//            }
-//        }
-//    }
+    public static void agregarCuenta(Cliente[] clienteArray, String ID) {
+        int index = 0;
+        if (ID.equals("")) {
+            ID = JOptionPane.showInputDialog("Id del cliente: ");
+        }
+        Cliente temporal = buscarClienteId(clienteArray, ID);
+        if (temporal != null) {
+            int[] cuentas = temporal.getNumerosCuenta();
+            int cantidad = Integer.parseInt(JOptionPane.showInputDialog(null, "Bienvenid@ "
+                    + temporal.getNombre() + "\n ¿Cuántas cuentas desea agregar? (Ingrese 0 para salir)"));
+            if (cantidad == 0) {
+            } else if (cuentas[4] != 0) {
+                int opt = menuGenerico("El cliente ya tiene 5 cuentas registradas en el sistema",
+                        "Codigo Repetido",
+                        JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo usuario", "Cancelar"});
+                if (opt == 0) {
+                    agregarCuenta(clienteArray, "");
+                }
+            } else if (indexCuenta(cuentas) + 1 + cantidad > 6) {
+                JOptionPane.showMessageDialog(null, "Estas ingresando un numero mayor" +
+                        " a la cantidad de la cuenta");
+                agregarCuenta(clienteArray, "");
+            } else {
+                index = indexCuenta(cuentas);
+                if (index != 0) {
+//index += 1;
+                }
+                JOptionPane.showMessageDialog(null,"******** Cuentas agregadas con exito ********");
+                for (int i = index; i < cantidad + index; i++) {
+                    cuentas[i] = accountNumber + 1; // agregar cuenta al arreglo
+                    accountNumber++; // incrementar contador de cuentas agregadas
+                }
+            }
+        } else {
+            int opt = menuGenerico("El cliente con el id: " + ID + " no esta en el sistema",
+                    "Codigo Repetido",
+                    JOptionPane.WARNING_MESSAGE, new String[]{"Nuevo codigo", "Cancelar"});
+            if (opt == 0) {
+                agregarCuenta(clienteArray, "");
+            }
+        }
+    }
 
 
     //Registro de Clientes Manualmente
@@ -334,6 +331,7 @@ public class Main {
             Cliente temporal = buscarClienteUsuario(clienteArray, username);
             if (temporal != null) {
                 boolean nuevoUsuarioVar = nuevoUsuario(temporal);
+                boolean allGood = false;
                 int intentos = 0; // Commented out, not used in this version
                 if (nuevoUsuarioVar) {
                     if (temporal.getClave() == null || temporal.getClave().trim().isEmpty()) {
@@ -343,6 +341,7 @@ public class Main {
                         System.out.println("Su clave debe tener un mínimo 6 caracteres y un máximo de 10\nDebe contener al menos un número\nDebe contener al menos una letra");
 
                         String claveTemporal;
+
                         boolean passwordValid = false;
                         do {
                             claveTemporal = JOptionPane.showInputDialog("Ingrese su nueva clave de acceso: ");
@@ -367,7 +366,7 @@ public class Main {
                                         JOptionPane.showMessageDialog(null, "Clave establecida correctamente.");
 
                                         // Request three accesses with external method
-                                        boolean grantAcces = validateAccessCard(temporal);
+                                        allGood = true;
 
                                         // Reset incorrect password attempts counter
                                         intentos = 0;
@@ -402,42 +401,43 @@ public class Main {
                         }
                     }
                 }
-                boolean grantAcces = validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
-                if (grantAcces){
-                    String status;
-                    if (temporal.getStatus()){
-                        status = "Activo";
-                    }else {
-                        status = "Inactivo";
-                    }
-                    System.out.println("Acceso concedido el estado del usuario es: " + status);
-                    JOptionPane.showMessageDialog(null,"Acceso concedido el estado del usuario es: " + status);
+                if (allGood){
+                    boolean grantAcces = validateAccessCard(temporal); // Use 'temporal' instead of looping through clienteArray
+                    if (grantAcces){
+                        String status;
+                        if (temporal.getStatus()){
+                            status = "Activo";
+                        }else {
+                            status = "Inactivo";
+                        }
+                        System.out.println("Acceso concedido el estado del usuario es: " + status);
+                        JOptionPane.showMessageDialog(null,"Acceso concedido el estado del usuario es: " + status);
 
-                    mostrarMenuClientes(clienteArray);
-                }else {
-                    String status;
-                    if (temporal.getStatus()){
-                        status = "Activo";
+                        mostrarMenuClientes(clienteArray);
                     }else {
-                        status = "Inactivo";
+                        String status;
+                        if (temporal.getStatus()){
+                            status = "Activo";
+                        }else {
+                            status = "Inactivo";
+                        }
+                        System.out.println("Acceso denegado cambiando estado del usuario a: " + status);
+                        JOptionPane.showMessageDialog(null,"Acceso concedido el estado del usuario es: " + status);
+                        temporal.setStatus(false);
                     }
-                    System.out.println("Acceso denegado cambiando estado del usuario a: " + status);
-                    JOptionPane.showMessageDialog(null,"Acceso concedido el estado del usuario es: " + status);
-                    temporal.setStatus(false);
-                    }
-
-                }
-            } else {
-                int opt = menuGenerico(
-                        "El cliente con el usuario: " + username + " no está en el sistema",
-                        "ID incorrecto",
-                        JOptionPane.WARNING_MESSAGE,
-                        new String[]{"Intentarlo de nuevo", "Cancelar"});
-                if (opt == 0) {
-                    validateLogin(clienteArray, "");
                 }
             }
+        } else {
+            int opt = menuGenerico(
+                    "El cliente con el usuario: " + username + " no está en el sistema",
+                    "ID incorrecto",
+                    JOptionPane.WARNING_MESSAGE,
+                    new String[]{"Intentarlo de nuevo", "Cancelar"});
+            if (opt == 0) {
+                validateLogin(clienteArray, "");
+            }
         }
+    }
     public static boolean validateAccessCard(Cliente cliente) {
         int[][] accessCard = cliente.getTarjetaAcceso();
         int successfulAttempts = 0; // Counter for successful attempts
@@ -490,8 +490,8 @@ public class Main {
     }
 
     public static boolean nuevoUsuario(Cliente cliente){
-       boolean nuevoUsuario = cliente.isNewUser();
-    return nuevoUsuario; }
+        boolean nuevoUsuario = cliente.isNewUser();
+        return nuevoUsuario; }
 
     //Anyelo
     public static int indexDatos(Cliente[] clienteArray) {
@@ -542,7 +542,7 @@ public class Main {
     }
     //buscamos en la matriz de clientes para mostrar la informacion del cliente buscado esto es de la parte de buscar cliente
     public static void buscarCliente(Cliente[] clienteArray, String ID, String email, String remplazo) {
-        // Buscamos
+// Buscamos
         if (ID.equals("")) {
             ID = JOptionPane.showInputDialog("Id del cliente: ");
         }
@@ -612,7 +612,23 @@ public class Main {
                 }
             }
             if (opt == 2) {
-                System.out.println("Botones de Cuentas");
+                int[] cuenta = temporal.getNumerosCuenta();
+                String[] opciones = new String[cuenta.length + 1];
+                opciones[0] = "Cancelar";
+                for (int i = 0; i < cuenta.length; i++) {
+                    opciones[i + 1] = String.valueOf(cuenta[i]);
+                }
+                int opt4 = menuGenerico("Eliga la cuenta que deseas acceder",
+                        "Cuentas registradas",
+                        JOptionPane.WARNING_MESSAGE,
+                        opciones);
+                if (opt4 == 0) {
+                    buscarCliente(clienteArray, ID, email, remplazo);
+                }
+                int index = opt4 - 1; // resta 1 para obtener el índice del número de cuenta
+                JOptionPane.showMessageDialog(null, "Cuenta a la cual ingresó: " + cuenta[index]);
+                buscarCliente(clienteArray, ID, email, remplazo);
+
             }
         } else {
             int opt = menuGenerico(
@@ -632,4 +648,62 @@ public class Main {
         String pattern = "[^@]+@[^@]+\\.[^@]+";
         return email.matches(pattern);
     }
+
+
+
+    public static Cliente buscarCuenta(Cliente[] clienteArray, int cuenta) {
+        for (int i = 0; i < clienteArray.length; i++) {
+            if (clienteArray[i] != null) {
+                int[] cuentas = clienteArray[i].getNumerosCuenta();
+                for (int j = 0; j < cuentas.length; j++) {
+                    if (cuentas[j] == cuenta) {
+                        return clienteArray[i];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void encontrarCuenta(Cliente[] clienteArray) {
+        int cuentaIngresada = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingresa el número de cuenta"));
+        Cliente temporal = buscarCuenta(clienteArray, cuentaIngresada);
+        if (temporal != null) {
+            int[] numerosCuenta = temporal.getNumerosCuenta();
+            boolean cuentaEncontrada = false;
+            for (int i = 0; i < numerosCuenta.length; i++) {
+                if (numerosCuenta[i] == cuentaIngresada) {
+                    cuentaEncontrada = true;
+                    JOptionPane.showMessageDialog(null, "Se encontró la cuenta: " + cuentaIngresada +
+                            " la cual esta registrada a nombre de" + temporal.getNombre());
+                    break;
+                }
+            }
+            if (!cuentaEncontrada) {
+                System.out.println("Cuentas del cliente:");
+                for (int i = 0; i < numerosCuenta.length; i++) {
+                    System.out.println(numerosCuenta[i]);
+                }
+                System.out.println("Cuenta ingresada: " + cuentaIngresada);
+                int opt = menuGenerico(
+                        "El número de cuenta ingresado no pertenece al cliente.\n¿Desea intentar de nuevo?",
+                        "Cuenta Incorrecta",
+                        JOptionPane.WARNING_MESSAGE,
+                        new String[]{"Sí", "Cancelar"});
+                if (opt == 0) {
+                    encontrarCuenta(clienteArray);
+                }
+            }
+        } else {
+            int opt = menuGenerico(
+                    "La cuenta " + cuentaIngresada + " no está en el sistema.\n¿Desea intentar de nuevo?",
+                    "Cuenta Incorrecta",
+                    JOptionPane.WARNING_MESSAGE,
+                    new String[]{"Sí", "Cancelar"});
+            if (opt == 0) {
+                encontrarCuenta(clienteArray);
+            }
+        }
+    }
+
 }
