@@ -6,12 +6,14 @@ public class Cliente {
     private String email;
     private String user;
     private String clave;
+    private boolean newUser;
     private boolean status;
     private int[][] tarjetaAcceso;
-    private int[] numerosCuenta;
+    private Cuentas cuentas;
+//    private int[] numerosCuenta;
 
 
-    public Cliente(String ID, String nombre, String phone, String email, String user, boolean status, String clave) {
+    public Cliente(String ID, String nombre, String phone, String email, String user, boolean status, String clave, boolean newUser) {
         this.ID = ID;
         this.nombre = nombre;
         this.phone = phone;
@@ -19,8 +21,9 @@ public class Cliente {
         this.user = user;
         this.status = status;
         this.clave = "";
+        this.newUser = newUser;
         this.tarjetaAcceso = generarTarjetaAcceso(); // Generate the access card only once
-        this.numerosCuenta = new int[]{0, 0, 0, 0, 0};
+//        this.numerosCuenta = new int[]{0, 0, 0, 0, 0};
     }
 
     public Cliente() {
@@ -51,7 +54,6 @@ public class Cliente {
         this.email = email;
         return email;
     }
-
     public String getUser() {
         return user;
     }
@@ -71,13 +73,20 @@ public class Cliente {
         this.clave = clave;
     }
 
-    public int[] getNumerosCuenta() {
-        return numerosCuenta;
+    public boolean isNewUser() {
+        return newUser;
+    }
+    public void setNewUser(boolean newUser) {
+        this.newUser = newUser;
     }
 
-    public void setNumerosCuenta(int[] numerosCuenta) {
-        this.numerosCuenta = numerosCuenta;
-    }
+    //    public int[] getNumerosCuenta() {
+//        return numerosCuenta;
+//    }
+//
+//    public void setNumerosCuenta(int[] numerosCuenta) {
+//        this.numerosCuenta = numerosCuenta;
+//    }
 
     public int[][] getTarjetaAcceso() {
         return tarjetaAcceso;
