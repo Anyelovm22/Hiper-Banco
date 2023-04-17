@@ -68,7 +68,7 @@ public class Main {
                     JOptionPane.showMessageDialog(null, "Agregar nuevo cliente");
                     agregarCliente(clienteArray, "");
                 }
-                case "Agregar nueva cuenta" -> {//NO MUESTRA
+                case "Agregar nueva cuenta" -> {
                     JOptionPane.showMessageDialog(null, "Agregar nueva cuenta");
                     agregarCuenta(clienteArray,"");
                 }

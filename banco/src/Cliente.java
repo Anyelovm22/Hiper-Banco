@@ -10,6 +10,7 @@ public class Cliente {
     private boolean status;
     private int[][] tarjetaAcceso;
     private int[] numerosCuenta;
+    private TiposCuenta tiposCuenta;
 
 
     public Cliente(String ID, String nombre, String phone, String email, String user, boolean status, String clave, boolean newUser) {
@@ -23,6 +24,7 @@ public class Cliente {
         this.newUser = newUser;
         this.tarjetaAcceso = generarTarjetaAcceso(); // Generate the access card only once
         this.numerosCuenta = new int[]{0, 0, 0, 0, 0};
+        this.tiposCuenta = getTiposCuenta();//NO FUNCA
     }
 
     public Cliente() {
@@ -81,6 +83,14 @@ public class Cliente {
 
         public int[] getNumerosCuenta() {
         return numerosCuenta;
+    }
+
+    public TiposCuenta getTiposCuenta() {
+        return tiposCuenta;
+    }
+
+    public void setTiposCuenta(TiposCuenta tiposCuenta) {
+        this.tiposCuenta = tiposCuenta;
     }
 
     public void setNumerosCuenta(int[] numerosCuenta) {
