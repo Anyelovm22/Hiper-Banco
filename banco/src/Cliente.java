@@ -19,10 +19,10 @@ public class Cliente {
         this.email = email;
         this.user = user;
         this.status = status;
-        this.clave = "";
+        this.clave = clave;
         this.newUser = newUser;
         this.tarjetaAcceso = generarTarjetaAcceso(); // Generate the access card only once
-//        this.numerosCuenta = new int[]{0, 0, 0, 0, 0};
+        this.numerosCuenta = new int[]{0, 0, 0, 0, 0};
     }
 
     public Cliente() {
@@ -111,13 +111,22 @@ public class Cliente {
         }
     return status;
     }
+    public String encryptClave(String clave) {
+        int length = clave.length();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            sb.append("*");
+        }
+        return sb.toString();
+    }
+
     public String info() {
         StringBuilder sb = new StringBuilder();
         sb.append("-*-*-*-*-*-*-*-*-*-*-*\n")
                 .append(" El id del cliente es: ").append(getID()).append("\n El nombre completo del cliente es: ")
                 .append(getNombre()).append("\n El telefono del cliente es: ").append(getPhone())
                 .append("\n El correo del cliente es: ").append(getEmail()).append("\n El usuario del cliente: ")
-                .append(getUser()).append("\n El estado del cliente es: " + status).append("\n La clave del cliente es: "+ getClave()).append(getStatus()).append("\nTarjeta de acceso\n");
+                .append(getUser()).append("\n El estado del cliente es: " + status).append("\n La clave del cliente es: ").append(encryptClave(getClave())).append("\n").append("\nTarjeta de acceso\n");
         int[][] tarjeta = getTarjetaAcceso(); // Retrieve the tarjetaAcceso matrix
         char[] columns = {'A', 'B', 'C', 'D', 'E'};
         sb.append("    ");

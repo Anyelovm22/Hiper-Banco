@@ -87,7 +87,7 @@ public class Main {
         } while (!choice.equals(BANCO_MENU_OPTIONS[BANCO_MENU_OPTIONS.length - 1]));//Compara si el usuario ha elegido o no la opcion "Salir", si no la ha elegido el loop seguira.
         //Solo funciona con Strings
     }
-    public static void mostrarMenuClientes(Cliente[] clienteArray) {
+    public static void mostrarMenuClientes(Cliente[] clienteArray, String username) {
         //MENU CLIENTES
         String[] CLIENTES_MENU_OPTIONS = {"Mostrar datos personales", "Modificar datos personales", "Mostrar cuentas y movimientos", "Salir del menu clientes"};
         String choice;
@@ -97,10 +97,13 @@ public class Main {
                 choice = CLIENTES_MENU_OPTIONS[CLIENTES_MENU_OPTIONS.length - 1];
             }
             switch (choice) {
-                case "Mostrar datos personales" ->
-                        JOptionPane.showMessageDialog(null, "Mostrar datos personales");
-                case "Modificar datos personales" ->
-                        JOptionPane.showMessageDialog(null, "Modificar datos personales");
+                case "Mostrar datos personales" -> {
+                    JOptionPane.showMessageDialog(null, "Mostrar datos personales");
+                    mostrarCliente(clienteArray, username);
+                }
+                case "Modificar datos personales" -> {
+                    JOptionPane.showMessageDialog(null, "Modificar datos personales");
+                }
                 case "Mostrar cuentas y movimientos" ->
                         JOptionPane.showMessageDialog(null, "Mostrar cuentas y movimientos");
                 case "Salir del menu clientes" ->
@@ -302,6 +305,11 @@ public class Main {
             }
         }
     }
+
+    public static void mostrarCliente(Cliente[] clienteArray, String username) {
+        Cliente temporal = buscarClienteUsuario(clienteArray, username);
+        System.out.println(temporal.info());
+    }
     //Mostrar informacion de todos los clientes agreagdos anteriormente es de la parte de mostrar clientes
     //Anyelo
     public static void mostrarClientes(Cliente[] clienteArray) {
@@ -332,7 +340,7 @@ public class Main {
             if (temporal != null) {
                 boolean nuevoUsuarioVar = nuevoUsuario(temporal);
                 boolean allGood = false;
-                int intentos = 0; // Commented out, not used in this version
+                int intentos = 3; // Commented out, not used in this version
                 if (nuevoUsuarioVar) {
                     if (temporal.getClave() == null || temporal.getClave().trim().isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Usuario nuevo, se le pedira que ingrese su nueva clave de acceso");
@@ -341,9 +349,8 @@ public class Main {
                         System.out.println("Su clave debe tener un mínimo 6 caracteres y un máximo de 10\nDebe contener al menos un número\nDebe contener al menos una letra");
 
                         String claveTemporal;
-
                         boolean passwordValid = false;
-                        do {
+                        while (!passwordValid ) {
                             claveTemporal = JOptionPane.showInputDialog("Ingrese su nueva clave de acceso: ");
                             if (claveTemporal == null) {
                                 // User pressed cancel, exit the loop
@@ -352,7 +359,8 @@ public class Main {
                             if (claveTemporal.length() >= 6 && claveTemporal.length() <= 10 && claveTemporal.matches(".*\\d.*") && claveTemporal.matches(".*[a-zA-Z].*")) {
                                 // Password meets all requirements
                                 passwordValid = true;
-                                if (passwordValid) {
+                                boolean passwordMatch = false;
+                                while (!passwordMatch && intentos > 0){
                                     // Ask for password confirmation
                                     String confirmClaveTemporal = JOptionPane.showInputDialog("Confirme su nueva clave de acceso: ");
                                     if (confirmClaveTemporal == null) {
@@ -362,21 +370,22 @@ public class Main {
                                     if (claveTemporal.equals(confirmClaveTemporal)) {
                                         // Passwords match, update the new password in the system
                                         temporal.setClave(claveTemporal);
-                                        System.out.println("Clave establecida correctamente.");
-                                        JOptionPane.showMessageDialog(null, "Clave establecida correctamente.");
-
+                                        System.out.println("Las claves coinciden.\nClave establecida correctamente.");
+                                        JOptionPane.showMessageDialog(null, "Las claves coinciden.\nClave establecida correctamente.");
+                                        passwordMatch = true;
                                         // Request three accesses with external method
                                         allGood = true;
 
                                         // Reset incorrect password attempts counter
-                                        intentos = 0;
+                                        intentos = 3;
                                     } else {
+                                        intentos--;
                                         // Passwords do not match
-                                        System.out.println("Las contraseñas no coinciden.");
-                                        int option = menuGenerico("Las contraseñas no coinciden.", "Contraseña no válida", JOptionPane.DEFAULT_OPTION, new String[] {"Confirmar clave nuevamente", "Cancelar"});
-                                        if (option == 1) {
-                                            // User selected "Confirmar clave nuevamente", continue to prompt for password confirmation
-                                        } else {
+                                        System.out.println("Las contraseñas no coinciden.\nIntentos restantes " + intentos);
+                                        int option = menuGenerico("Las contraseñas no coinciden.\nIntentos restantes " + intentos, "Contraseña no válida", JOptionPane.DEFAULT_OPTION, new String[] {"Confirmar clave nuevamente", "Cancelar"});
+                                        passwordMatch = false;
+
+                                        if (option !=0) {
                                             // User selected "Cancelar", exit the loop
                                             break;
                                         }
@@ -384,19 +393,26 @@ public class Main {
                                 }
                             } else {
                                 // Password does not meet requirements
-                                System.out.println("La clave no cumple con los requisitos. \t\"Su clave debe tener un mínimo 6 caracteres y un máximo de 10\\nDebe contener al menos un número\\nDebe contener al menos una letra");
-                                int option = menuGenerico("La clave no cumple con los requisitos. \t\"Su clave debe tener un mínimo 6 caracteres y un máximo de 10\\nDebe contener al menos un número\\nDebe contener al menos una letra", "Clave no válida", JOptionPane.DEFAULT_OPTION, new String[] {"Agregar otra clave", "Cancelar"});
-                                if (option == 1) {
-                                    // User selected "Agregar otra clave", continue to prompt for password
-                                } else {
+                                System.out.println("La clave no cumple con los requisitos. \nSu clave debe tener un mínimo 6 caracteres y un máximo de 10\nDebe contener al menos un número\nDebe contener al menos una letra");
+                                int option = menuGenerico("La clave no cumple con los requisitos. \nSu clave debe tener un mínimo 6 caracteres y un máximo de 10\nDebe contener al menos un número\nDebe contener al menos una letra", "Clave no válida", JOptionPane.DEFAULT_OPTION, new String[] {"Agregar otra clave", "Cancelar"});
+                                if (option != 0) {
                                     // User selected "Cancelar", exit the loop
                                     break;
                                 }
                             }
-                        } while (!passwordValid);
+                        }
 
-                        if (intentos == 3) {
+                        if (intentos == 0) {
                             // Client's status goes to inactive after 3 incorrect password attempts
+                            temporal.setStatus(false);
+                            String status;
+                            if (temporal.getStatus()){
+                                status = "Activo";
+                            }else {
+                                status = "Inactivo";
+                            }
+                            System.out.println("Acceso denegado cambiando estado del usuario a: " + status);
+                            JOptionPane.showMessageDialog(null,"Acceso concedido el estado del usuario es: " + status);
                             temporal.setStatus(false);
                         }
                     }
@@ -413,18 +429,20 @@ public class Main {
                         System.out.println("Acceso concedido el estado del usuario es: " + status);
                         JOptionPane.showMessageDialog(null,"Acceso concedido el estado del usuario es: " + status);
 
-                        mostrarMenuClientes(clienteArray);
-                    }else {
-                        String status;
-                        if (temporal.getStatus()){
-                            status = "Activo";
-                        }else {
-                            status = "Inactivo";
-                        }
-                        System.out.println("Acceso denegado cambiando estado del usuario a: " + status);
-                        JOptionPane.showMessageDialog(null,"Acceso concedido el estado del usuario es: " + status);
-                        temporal.setStatus(false);
+                        mostrarMenuClientes(clienteArray, username);
                     }
+//                    NO SE NECESITA ESTA PARTE... CREO
+//                    else {
+//                        String status;
+//                        if (temporal.getStatus()){
+//                            status = "Activo";
+//                        }else {
+//                            status = "Inactivo";
+//                        }
+//                        System.out.println("Acceso denegado cambiando estado del usuario a: " + status);
+//                        JOptionPane.showMessageDialog(null,"Acceso concedido el estado del usuario es: " + status);
+//                        temporal.setStatus(false);
+//                    }
                 }
             }
         } else {
@@ -439,6 +457,7 @@ public class Main {
         }
     }
     public static boolean validateAccessCard(Cliente cliente) {
+        System.out.println("Se le pedira que ingrese 3 codigos de su tarjeta de acceso");
         int[][] accessCard = cliente.getTarjetaAcceso();
         int successfulAttempts = 0; // Counter for successful attempts
         // Loop to prompt for values three times
@@ -469,7 +488,7 @@ public class Main {
                 // Validate input against access card value
                 if (inputValue == accessCardValue) {
                     JOptionPane.showMessageDialog(null,
-                            "¡Acceso concedido!",
+                            "El valor de la tarjeta de acceso es correcto",
                             "Validación de tarjeta de acceso", JOptionPane.INFORMATION_MESSAGE);
                     successfulAttempts++; // Increment successful attempts counter
                 } else {
